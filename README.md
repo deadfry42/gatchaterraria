@@ -6,6 +6,8 @@
 
 ----------
 
+**PLAY HERE**: https://steamcommunity.com/sharedfiles/filedetails/?id=3261218686
+
 this is a mod that adds an npc called the "Retired Weaponsmith".  
 he is not a painter. no matter what he tells you, he is not a painter.  
 this guy is a bastard. he takes every weapon in the world and sells it back to you.  
