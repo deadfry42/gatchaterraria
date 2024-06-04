@@ -126,7 +126,7 @@ namespace badgatchagame.Content.NPCs
                 // what a stinky loser.
 
                 newPrice = (double)Main.rand.Next(2);
-                newPrice += 1D;
+                newPrice += 0.5D;
             } else {
                 double addPrice = 1D;
                 addPrice += Main.rand.Next(4);

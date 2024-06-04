@@ -29,6 +29,7 @@ in all seriousness, this mod is specifically designed to make you want to kill y
 
 patch notes:
 
+version 1.0.4 -> balanced prices, renamed to "badgatchagame", fixed a few other issues  
 version 1.0.3 -> upgrading just so tmodloader stops complaining ;P  
 version 1.0.2 -> changed description of mod  
 version 1.0.1 -> balanced weapon prices (they were absurd)  
