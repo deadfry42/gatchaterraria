@@ -1,7 +1,7 @@
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace randomitems.Content.PlayerObjects
+namespace badgatchagame.Content.PlayerObjects
 {
     public class RandomPlayer : ModPlayer
     {

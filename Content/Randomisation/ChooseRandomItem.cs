@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
-using static randomitems.Content.Randomisation.RandomItemsLists;
+using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
-namespace randomitems.Content.Randomisation
+namespace badgatchagame.Content.Randomisation
 {
     public class ChooseRandomItem : ModSystem
     {

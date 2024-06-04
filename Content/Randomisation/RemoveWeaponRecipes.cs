@@ -1,9 +1,9 @@
 using Terraria;
 using Terraria.ModLoader;
 using System.Collections.Generic;
-using static randomitems.Content.Randomisation.RandomItemsLists;
+using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
-namespace randomitems.Content.Randomisation
+namespace badgatchagame.Content.Randomisation
 {
     public class RemoveWeaponRecipes : ModSystem
     {

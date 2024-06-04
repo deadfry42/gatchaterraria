@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace randomitems.Content.Items
+namespace badgatchagame.Content.Items
 { 
 	// This is a basic item template.
 	// Please see tModLoader's ExampleMod for every other example:

@@ -2,11 +2,11 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
-using randomitems.Content.PlayerObjects;
-using static randomitems.Content.Randomisation.RandomItemsLists;
 using System.Collections.Generic;
+using badgatchagame.Content.PlayerObjects;
+using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
-namespace randomitems.Content.Removals
+namespace badgatchagame.Content.Removals
 {
     public class RemoveBagWeapons : GlobalItem
     {

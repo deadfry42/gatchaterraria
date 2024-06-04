@@ -4,9 +4,9 @@ using Terraria.GameContent.Generation;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
-using static randomitems.Content.Randomisation.RandomItemsLists;
+using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
-namespace randomitems.Content.Removals
+namespace badgatchagame.Content.Removals
 {
     public class RemoveChestWeapons : ModSystem
     {

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using randomitems.Content.Items;
+using badgatchagame.Content.Items;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 // i know
 // i hate myself too
 
-namespace randomitems.Content.Randomisation
+namespace badgatchagame.Content.Randomisation
 {
     public class RandomItemsLists : ModSystem
     {

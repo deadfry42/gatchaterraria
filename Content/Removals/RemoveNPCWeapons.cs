@@ -2,9 +2,9 @@ using Terraria;
 using Terraria.ModLoader;
 using System.Collections.Generic;
 using Terraria.GameContent.ItemDropRules;
-using static randomitems.Content.Randomisation.RandomItemsLists;
+using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
-namespace randomitems.Content.Removals
+namespace badgatchagame.Content.Removals
 {
     public class RemoveNPCWeapons : GlobalNPC
     {
@@ -30,7 +30,7 @@ namespace randomitems.Content.Removals
         }
 
         private static void Log(string S) {
-            ModContent.GetInstance<randomitems>().Logger.Info(S);
+            ModContent.GetInstance<badgatchagame>().Logger.Info(S);
         }
 
         private static int[] RemoveAllItemsInDropIDS(int[] dropIds) {

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using randomitems.Content.PlayerObjects;
-using randomitems.Content.Randomisation;
+using badgatchagame.Content.PlayerObjects;
+using badgatchagame.Content.Randomisation;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Events;
-using static randomitems.Content.Randomisation.RandomItemsLists;
+using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
-namespace randomitems.Content.NPCs
+namespace badgatchagame.Content.NPCs
 { 
     [AutoloadHead]
 	public class randomguy : ModNPC
