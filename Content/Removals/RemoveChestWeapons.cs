@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.Generation;
+using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
@@ -35,7 +36,7 @@ namespace badgatchagame.Content.Removals
                         Item item = chest.item[inventoryIndex];
                         if (item != null && itemPool.Contains(item.type))
                         {
-                            chest.item[inventoryIndex] = new Item();
+                            chest.item[inventoryIndex] = new Item(ItemID.GoldCoin, Main.rand.Next(9)+1);
                         }
                     }
                 }
