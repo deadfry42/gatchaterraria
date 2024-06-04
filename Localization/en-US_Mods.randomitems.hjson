@@ -1,0 +1,30 @@
+# This file will automatically update with entries for new content after a build and reload.
+
+Items: {
+	TROLOLOLOL: {
+		DisplayName: Completely useless sword
+		Tooltip: Good luck ;)
+	}
+
+	FreeToken: {
+		DisplayName: Discount coupon
+		Tooltip: It has no expiration date.
+	}
+}
+
+NPCs: {
+	randomguy: {
+		DisplayName: Retired Weaponsmith
+
+		TownNPCMood: {
+			Content: I am content. Thank you.
+			NoHome: Being homeless is a situation no weaponsmith wants to be in.
+			FarFromHome: Where's my home?
+			LoveSpace: Having plenty of space is amazing for a weaponsmith like me.
+			DislikeCrowded: There's too many people near my blazing hot iron!
+			HateCrowded: I cannot work with the amount of people here!
+			LikeNPC_Princess: I am taking a liking to {NPCName}.
+			Princess_LovesNPC: I am taking a liking to {NPCName}.
+		}
+	}
+}
