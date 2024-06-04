@@ -25,7 +25,5 @@ in all seriousness, this mod is specifically designed to make you want to kill y
 
 ----------
 
-patch notes:
-
-version 1.0.1 -> balanced weapon prices (they were absurd)
-version 1.0.0 -> release
+source code (cuz im a foss guy):
+https://github.com/deadfry42/gatchaterraria

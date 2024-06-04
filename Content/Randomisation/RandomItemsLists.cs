@@ -4,6 +4,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+// i know
+// i hate myself too
+
 namespace randomitems.Content.Randomisation
 {
     public class RandomItemsLists : ModSystem

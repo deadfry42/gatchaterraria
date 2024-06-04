@@ -7,7 +7,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Events;
 using static randomitems.Content.Randomisation.RandomItemsLists;
-using Stubble.Core;
 
 namespace randomitems.Content.NPCs
 { 
