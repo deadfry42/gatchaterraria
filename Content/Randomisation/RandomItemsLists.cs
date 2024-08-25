@@ -489,16 +489,16 @@ namespace badgatchagame.Content.Randomisation
             ItemID.Zenith
         ];
 
-        public static readonly List<int> randomItemsDebug = [
-            // ItemID.CrimtaneOre,
-            // ItemID.DemoniteOre,
-            // ItemID.TissueSample,
-            // ItemID.ShadowScale,
-            // ItemID.CorruptSeeds,
-            // ItemID.CrimsonSeeds,
-            // ItemID.Gel,
-            // ItemID.HallowedBar,
-        ];
+        // public static readonly List<int> randomItemsDebug = [
+        //     ItemID.CrimtaneOre,
+        //     ItemID.DemoniteOre,
+        //     ItemID.TissueSample,
+        //     ItemID.ShadowScale,
+        //     ItemID.CorruptSeeds,
+        //     ItemID.CrimsonSeeds,
+        //     ItemID.Gel,
+        //     ItemID.HallowedBar,
+        // ];
         
         public static List<int> getCurrentProgressionList() { // fuck you i dont care about naming conventions imma do it ma own way
             List<int> returnList = [];
@@ -535,6 +535,89 @@ namespace badgatchagame.Content.Randomisation
             return returnList;
         }
 
+        public static int getAccompanyingItemIdIfExists(int mainItem) {
+            int rand;
+            switch (mainItem) {
+                case ItemID.AbigailsFlower:
+                    return ItemID.BlandWhip;
+                case ItemID.BabyBirdStaff:
+                    return ItemID.BlandWhip;
+                case ItemID.SlimeStaff:
+                    return ItemID.BlandWhip;
+                case ItemID.FlinxStaff:
+                    return ItemID.BlandWhip;
+
+                case ItemID.VampireFrogStaff:
+                    return ItemID.ThornWhip;
+                case ItemID.HornetStaff:
+                    return ItemID.ThornWhip;
+
+                case ItemID.ImpStaff:
+                    return ItemID.BoneWhip;
+
+                case ItemID.SpiderStaff:
+                    return ItemID.FireWhip;
+                case ItemID.PirateStaff:
+                    return ItemID.FireWhip;
+
+                case ItemID.Smolstar:
+                    return ItemID.CoolWhip;
+                case ItemID.SanguineStaff:
+                    return ItemID.CoolWhip;
+
+                case ItemID.OpticStaff:
+                    return ItemID.SwordWhip;
+                case ItemID.PygmyStaff:
+                    return ItemID.SwordWhip;
+
+                case ItemID.DeadlySphereStaff:
+                    return ItemID.ScytheWhip;
+                case ItemID.RavenStaff:
+                    return ItemID.ScytheWhip;
+
+                case ItemID.StormTigerStaff:
+                    return ItemID.MaceWhip;
+                case ItemID.XenoStaff:
+                    return ItemID.MaceWhip;
+                case ItemID.TempestStaff:
+                    return ItemID.MaceWhip;
+
+                case ItemID.StardustDragonStaff:
+                    return ItemID.RainbowWhip;
+                case ItemID.StardustCellStaff:
+                    return ItemID.RainbowWhip;
+                case ItemID.EmpressBlade:
+                    return ItemID.RainbowWhip;
+
+                case ItemID.BlandWhip:
+                    rand = Main.rand.Next(3);
+                    return rand == 0 ? ItemID.FlinxStaff : rand == 1 ? ItemID.SlimeBanner : rand == 2 ? ItemID.AbigailsFlower : ItemID.BabyBirdStaff;
+                case ItemID.ThornWhip:
+                    rand = Main.rand.Next(1);
+                    return rand == 0 ? ItemID.VampireFrogStaff : ItemID.HornetStaff;
+                case ItemID.BoneWhip:
+                    return ItemID.ImpStaff;
+                case ItemID.FireWhip:
+                    rand = Main.rand.Next(1);
+                    return rand == 0 ? ItemID.SpiderStaff : ItemID.PirateStaff;
+                case ItemID.CoolWhip:
+                    rand = Main.rand.Next(1);
+                    return rand == 0 ? ItemID.SanguineStaff : ItemID.Smolstar;
+                case ItemID.SwordWhip:
+                    rand = Main.rand.Next(1);
+                    return rand == 0 ? ItemID.OpticStaff : ItemID.PygmyStaff;
+                case ItemID.ScytheWhip:
+                    rand = Main.rand.Next(1);
+                    return rand == 0 ? ItemID.DeadlySphereBanner : ItemID.RavenStaff;
+                case ItemID.MaceWhip:
+                    rand = Main.rand.Next(2);
+                    return rand == 0 ? ItemID.StormTigerStaff : rand == 1 ? ItemID.XenoStaff : ItemID.TempestStaff;
+                case ItemID.RainbowWhip:
+                    return ItemID.EmpressBlade;
+            }
+            return 0;
+        }
+
         public static List<int> getAllRandomItems() {
             List<int> returnList =
             [
@@ -566,7 +649,7 @@ namespace badgatchagame.Content.Randomisation
                 .. randomItemsPostMoonMan,
 
 
-                .. randomItemsDebug,
+                // .. randomItemsDebug,
             ];
             return returnList;
         }

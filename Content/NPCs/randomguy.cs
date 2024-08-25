@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Events;
 using static badgatchagame.Content.Randomisation.RandomItemsLists;
+using Terraria.Audio;
 
 namespace badgatchagame.Content.NPCs
 { 
@@ -51,11 +52,12 @@ namespace badgatchagame.Content.NPCs
 
         private static bool PlayerInventoryIsFull() {
             Player plr = Main.player[Main.myPlayer];
-            bool returnVal = true;
+            int available = 0;
             for (int i = 0; i <= 49; i++) {
-                if (plr.inventory[i].type < ItemID.IronPickaxe) returnVal = false;
+                if (getAllRandomItems().FindIndex(a => a == plr.inventory[i].type) > -1) available++;
+                else if (plr.inventory[i].type < ItemID.IronPickaxe) available++;
             }
-            return returnVal;
+            return !(available > 1); // 2 slots available
         }
 
         public override void OnChatButtonClicked(bool firstButton, ref string shopName)
@@ -75,8 +77,17 @@ namespace badgatchagame.Content.NPCs
                                 itemSlot = plr.FindItem(item);
                             }
                         }
+                        SoundEngine.PlaySound(SoundID.Item37);
                         plr.GetItem(Main.myPlayer, chosen, GetItemSettings.ItemCreatedFromItemUsage);
-                        Main.npcChatText = GetWeaponObtainedText(chosen.Name, chosenID);
+                        int accompanyingItemId = getAccompanyingItemIdIfExists(chosenID);
+                        Item accompanyingItem = new Item(accompanyingItemId);
+                        if (accompanyingItemId > 0) {
+                            plr.GetItem(Main.myPlayer, accompanyingItem, GetItemSettings.ItemCreatedFromItemUsage);
+                            Main.npcChatText = GetDualWeaponObtainedText(chosen.Name, chosenID, accompanyingItem.Name, accompanyingItemId);
+                        } else {
+                            Main.npcChatText = GetWeaponObtainedText(chosen.Name, chosenID);
+                        }
+                        
                         if (RemovePlayersHardmodeDiscount() == false) IncreaseRerollPrice();
                     } else {
                         if (Main.rand.NextBool(50)) {
@@ -265,7 +276,10 @@ namespace badgatchagame.Content.NPCs
                 "Johnathon",
                 "Chad",
                 "Wael", //waeland confirmed!??!?!!?
-                "Brock"
+                "Brock",
+                "Lysander",
+                "Mathias",
+                "Catherine",
             ];
         }
 
@@ -273,6 +287,37 @@ namespace badgatchagame.Content.NPCs
         {
             button = "Spin new item";
             button2 = "Price";
+        }
+
+        private static string GetDualWeaponObtainedText(string WeaponName, int WeaponType, string Weapon2Name, int Weapon2Type)
+        {
+            double RerollPrice = GetAdjustedPlayerRerollPrice();
+            if (RerollPrice <= 1) {
+                //first time
+                return Main.rand.Next(3) switch // only 3 cuz it's less common
+                {
+                    0 => "Here's your free [item:"+WeaponType+"] "+WeaponName+", and a complimentary [item:"+Weapon2Type+"] "+Weapon2Name+"!",
+                    1 => "Take good care of your first [item:"+WeaponType+"] "+WeaponName+" with [item:"+Weapon2Type+"] "+Weapon2Name+"!",
+                    2 => "I found the perfect combination of a [item:"+WeaponType+"] "+WeaponName+" & [item:"+Weapon2Type+"] "+Weapon2Name+"!",
+                    _ => invalidString,
+                };
+            } else if (PlayerIsEligableForHardmodeDiscount()) {
+                return Main.rand.Next(3) switch // only 3 cuz it's less common
+                {
+                    0 => "Here's your welcoming [item:"+WeaponType+"] "+WeaponName+" with [item:"+Weapon2Type+"] "+Weapon2Name+"! Thank you again!",
+                    1 => "I entrust you with this [item:"+WeaponType+"] "+WeaponName+" with a [item:"+Weapon2Type+"] "+Weapon2Name+"! Congratulations!",
+                    2 => "Congratulations! Here's a [item:"+WeaponType+"] "+WeaponName+" with a [item:"+Weapon2Type+"] "+Weapon2Name+"!",
+                    _ => invalidString,
+                };
+            } else {
+                return Main.rand.Next(3) switch // only 3 cuz it's less common
+                {
+                    0 => "I've just found the perfect combination, a [item:"+WeaponType+"] "+WeaponName+" with [item:"+Weapon2Type+"] "+Weapon2Name+"!",
+                    1 => "Have fun with this [item:"+WeaponType+"] "+WeaponName+" with a free [item:"+Weapon2Type+"] "+Weapon2Name+"!",
+                    2 => "I found this [item:"+WeaponType+"] "+WeaponName+" and [item:"+Weapon2Type+"] "+Weapon2Name+" just for you!",
+                    _ => invalidString,
+                };
+            }
         }
 
         private static string GetWeaponObtainedText(string WeaponName, int WeaponType)
@@ -391,12 +436,12 @@ namespace badgatchagame.Content.NPCs
                 case 1: // not enough inv room
                     return Main.rand.Next(6) switch
                     {
-                        0 => "You're holding onto too many things!",
-                        1 => "Put something away so I can give this item to you!",
-                        2 => "I don't see a place to put this item.",
-                        3 => "Make some room, please! I can't give this to you right now!",
-                        4 => "You can't fit this new weapon into your inventory!",
-                        5 => "Please, make some room for your new weapon!",
+                        0 => "You're holding onto too many things! You need 2 inventory slots!",
+                        1 => "Please, make some room! I need 2 inventory slots!",
+                        2 => "I can't see 2 free slots in your inventory!",
+                        3 => "You really can't fit 2 things in your inventory?",
+                        4 => "Why don't you have room for 2 more things in your inventory?",
+                        5 => "Please, not even 2 items can fit in your inventory!",
                         _ => invalidString,
                     };
 
