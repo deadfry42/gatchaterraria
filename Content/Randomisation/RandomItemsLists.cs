@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using badgatchagame.Content.Items;
+using CsvHelper;
 using Terraria;
+using Terraria.GameContent.Events;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -136,6 +138,7 @@ namespace badgatchagame.Content.Randomisation
             ItemID.WandofFrosting,
             ItemID.WandofSparking,
             ItemID.ZombieArm,
+            ItemID.Sickle,
         ];
 
         public static readonly List<int> randomItemsPostEOC = [
@@ -145,12 +148,8 @@ namespace badgatchagame.Content.Randomisation
 
         public static readonly List<int> randomItemsPostEvil = [
             ItemID.AleThrowingGlove,
-            ItemID.DD2BallistraTowerT1Popper,
-            ItemID.DD2ExplosiveTrapT1Popper,
             ItemID.Flamarang,
-            ItemID.DD2FlameburstTowerT1Popper,
             ItemID.ImpStaff,
-            ItemID.DD2LightningAuraT1Popper,
             ItemID.RedPhaseblade,
             ItemID.BluePhaseblade,
             ItemID.GreenPhaseblade,
@@ -308,24 +307,15 @@ namespace badgatchagame.Content.Randomisation
         ];
 
         public static readonly List<int> randomItemsPostMech = [
-            ItemID.DD2BallistraTowerT2Popper,
-            ItemID.DD2SquireDemonSword,
             ItemID.Code2,
             ItemID.Excalibur,
             ItemID.SwordWhip,
-            ItemID.DD2ExplosiveTrapT2Popper,
-            ItemID.DD2FlameburstTowerT2Popper,
             ItemID.Gungnir,
             ItemID.HallowJoustingLance,
             ItemID.HallowedRepeater,
-            ItemID.DD2LightningAuraT2Popper,
             ItemID.SuperStarCannon,
             ItemID.Yelets,
             ItemID.UnholyTrident,
-            ItemID.BookStaff,
-            ItemID.MonkStaffT1,
-            ItemID.MonkStaffT2,
-            ItemID.DD2PhoenixBow,
             ItemID.MushroomSpear,
         ];
 
@@ -357,7 +347,6 @@ namespace badgatchagame.Content.Randomisation
         ];
 
         public static readonly List<int> randomItemsPostPlantera = [
-            ItemID.DD2BetsyBow,
             ItemID.DeadlySphereStaff,
             ItemID.StormTigerStaff,
             ItemID.FlowerPow,
@@ -432,17 +421,10 @@ namespace badgatchagame.Content.Randomisation
         ];
         
         public static readonly List<int> randomItemsPreLunarCultist = [
-            ItemID.DD2BallistraTowerT3Popper,
-            ItemID.ApprenticeStaffT3,
             ItemID.FireworksLauncher,
-            ItemID.DD2ExplosiveTrapT3Popper,
-            ItemID.DD2FlameburstTowerT3Popper,
-            ItemID.DD2SquireBetsySword,
             ItemID.GolemFist,
             ItemID.HeatRay,
-            ItemID.DD2LightningAuraT3Popper,
             ItemID.PossessedHatchet,
-            ItemID.MonkStaffT3,
             ItemID.StaffofEarth,
             ItemID.Stynger,
         ];
@@ -489,16 +471,35 @@ namespace badgatchagame.Content.Randomisation
             ItemID.Zenith
         ];
 
-        // public static readonly List<int> randomItemsDebug = [
-        //     ItemID.CrimtaneOre,
-        //     ItemID.DemoniteOre,
-        //     ItemID.TissueSample,
-        //     ItemID.ShadowScale,
-        //     ItemID.CorruptSeeds,
-        //     ItemID.CrimsonSeeds,
-        //     ItemID.Gel,
-        //     ItemID.HallowedBar,
-        // ];
+        public static readonly List<int> randomitemsPostDD2T1 = [
+            ItemID.DD2BallistraTowerT1Popper,
+            ItemID.DD2ExplosiveTrapT1Popper,
+            ItemID.DD2FlameburstTowerT1Popper,
+            ItemID.DD2LightningAuraT1Popper,
+        ];
+
+        public static readonly List<int> randomitemsPostDD2T2 = [
+            ItemID.DD2BallistraTowerT2Popper,
+            ItemID.DD2ExplosiveTrapT2Popper,
+            ItemID.DD2FlameburstTowerT2Popper,
+            ItemID.DD2LightningAuraT2Popper,
+            ItemID.BookStaff,
+            ItemID.MonkStaffT1,
+            ItemID.MonkStaffT2,
+            ItemID.DD2PhoenixBow,
+            ItemID.DD2SquireDemonSword,
+        ];
+
+        public static readonly List<int> randomitemsPostDD2T3 = [
+            ItemID.DD2BallistraTowerT3Popper,
+            ItemID.DD2ExplosiveTrapT3Popper,
+            ItemID.DD2FlameburstTowerT3Popper,
+            ItemID.DD2LightningAuraT3Popper,
+            ItemID.DD2BetsyBow,
+            ItemID.DD2SquireBetsySword,
+            ItemID.MonkStaffT3,
+            ItemID.ApprenticeStaffT3,
+        ];
         
         public static List<int> getCurrentProgressionList() { // fuck you i dont care about naming conventions imma do it ma own way
             List<int> returnList = [];
@@ -524,6 +525,9 @@ namespace badgatchagame.Content.Randomisation
                 if (NPC.downedTowerStardust) { returnList.AddRange(randomItemsPostStardust); }
                 if (NPC.downedTowerNebula) { returnList.AddRange(randomItemsPostNebula); }
                 if (NPC.downedMoonlord) { returnList.AddRange(randomItemsPostMoonMan); }
+                if (DD2Event.DownedInvasionT1) { returnList.AddRange(randomitemsPostDD2T1); }
+                if (DD2Event.DownedInvasionT2) { returnList.AddRange(randomitemsPostDD2T2); }
+                if (DD2Event.DownedInvasionT3) { returnList.AddRange(randomitemsPostDD2T3); }
             } else {
                 returnList.AddRange(randomItemsPreboss);
                 if (NPC.downedBoss1) { returnList.AddRange(randomItemsPostEOC); }
@@ -535,87 +539,110 @@ namespace badgatchagame.Content.Randomisation
             return returnList;
         }
 
-        public static int getAccompanyingItemIdIfExists(int mainItem) {
+        public static Item getAccompanyingItemIfExists(int mainItem) {
+            Item MainItem = new(mainItem);
+            if (MainItem.useAmmo != AmmoID.None || MainItem.useAmmo > 0) { // i am sorry switch statement lovers
+                Item newitem = null;
+                int quantity = 250;
+                if (MainItem.useAmmo == AmmoID.Bullet && !NPC.savedWizard) newitem = new Item(ItemID.MusketBall);
+                else if (MainItem.useAmmo == AmmoID.Arrow && !NPC.savedWizard) newitem = new Item(ItemID.WoodenArrow);
+                else if (MainItem.useAmmo == AmmoID.Gel) newitem = new Item(ItemID.Gel);
+                else if (MainItem.useAmmo == AmmoID.FallenStar) {quantity = 100; newitem = new Item(ItemID.FallenStar);}
+                else if (MainItem.useAmmo == AmmoID.Sand) newitem = new Item(ItemID.SandBlock);
+                else if (MainItem.useAmmo == AmmoID.CandyCorn) newitem = new Item(ItemID.CandyCorn);
+                else if (MainItem.useAmmo == AmmoID.Snowball) newitem = new Item(ItemID.Snowball);
+                else if (MainItem.useAmmo == AmmoID.Flare) newitem = new Item(ItemID.Flare);
+                else if (MainItem.useAmmo == AmmoID.JackOLantern) newitem = new Item(ItemID.ExplosiveJackOLantern);
+                else if (MainItem.useAmmo == AmmoID.Rocket) newitem = new Item(ItemID.RocketI);
+                else if (MainItem.useAmmo == AmmoID.NailFriendly) newitem = new Item(ItemID.Nail);
+                else if (MainItem.useAmmo == AmmoID.Dart) newitem = new Item(ItemID.Seed);
+                else if (MainItem.useAmmo == AmmoID.StyngerBolt) newitem = new Item(ItemID.Stynger);
+                else if (MainItem.useAmmo == AmmoID.Stake) newitem = new Item(ItemID.Stake);
+                if (newitem != null) {
+                    newitem.stack = quantity;
+                    return newitem;
+                }
+            }
             int rand;
             switch (mainItem) {
                 case ItemID.AbigailsFlower:
-                    return ItemID.BlandWhip;
                 case ItemID.BabyBirdStaff:
-                    return ItemID.BlandWhip;
                 case ItemID.SlimeStaff:
-                    return ItemID.BlandWhip;
                 case ItemID.FlinxStaff:
-                    return ItemID.BlandWhip;
+                    return new Item(ItemID.BlandWhip);
 
                 case ItemID.VampireFrogStaff:
-                    return ItemID.ThornWhip;
                 case ItemID.HornetStaff:
-                    return ItemID.ThornWhip;
+                case ItemID.DD2BallistraTowerT1Popper:
+                case ItemID.DD2ExplosiveTrapT1Popper:
+                case ItemID.DD2FlameburstTowerT1Popper:
+                case ItemID.DD2LightningAuraT1Popper:
+                    return new Item(ItemID.ThornWhip);
 
                 case ItemID.ImpStaff:
-                    return ItemID.BoneWhip;
+                    return new Item(ItemID.BoneWhip);
 
                 case ItemID.SpiderStaff:
-                    return ItemID.FireWhip;
                 case ItemID.PirateStaff:
-                    return ItemID.FireWhip;
+                case ItemID.DD2BallistraTowerT2Popper:
+                case ItemID.DD2FlameburstTowerT2Popper:
+                    return new Item(ItemID.FireWhip);
 
                 case ItemID.Smolstar:
-                    return ItemID.CoolWhip;
                 case ItemID.SanguineStaff:
-                    return ItemID.CoolWhip;
+                case ItemID.DD2ExplosiveTrapT2Popper:
+                case ItemID.DD2LightningAuraT2Popper:
+                    return new Item(ItemID.CoolWhip);
 
                 case ItemID.OpticStaff:
-                    return ItemID.SwordWhip;
                 case ItemID.PygmyStaff:
-                    return ItemID.SwordWhip;
+                    return new Item(ItemID.SwordWhip);
 
                 case ItemID.DeadlySphereStaff:
-                    return ItemID.ScytheWhip;
                 case ItemID.RavenStaff:
-                    return ItemID.ScytheWhip;
+                    return new Item(ItemID.ScytheWhip);
 
                 case ItemID.StormTigerStaff:
-                    return ItemID.MaceWhip;
                 case ItemID.XenoStaff:
-                    return ItemID.MaceWhip;
                 case ItemID.TempestStaff:
-                    return ItemID.MaceWhip;
+                case ItemID.DD2BallistraTowerT3Popper:
+                case ItemID.DD2FlameburstTowerT3Popper:
+                    return new Item(ItemID.MaceWhip);
 
                 case ItemID.StardustDragonStaff:
-                    return ItemID.RainbowWhip;
                 case ItemID.StardustCellStaff:
-                    return ItemID.RainbowWhip;
                 case ItemID.EmpressBlade:
-                    return ItemID.RainbowWhip;
+                case ItemID.DD2ExplosiveTrapT3Popper:
+                case ItemID.DD2LightningAuraT3Popper:
+                    return new Item(ItemID.RainbowWhip);
 
                 case ItemID.BlandWhip:
                     rand = Main.rand.Next(3);
-                    return rand == 0 ? ItemID.FlinxStaff : rand == 1 ? ItemID.SlimeBanner : rand == 2 ? ItemID.AbigailsFlower : ItemID.BabyBirdStaff;
+                    return rand == 0 ? new Item(ItemID.FlinxStaff) : rand == 1 ? new Item(ItemID.SlimeStaff) : rand == 2 ? new Item(ItemID.AbigailsFlower) : new Item(ItemID.BabyBirdStaff);
                 case ItemID.ThornWhip:
                     rand = Main.rand.Next(1);
-                    return rand == 0 ? ItemID.VampireFrogStaff : ItemID.HornetStaff;
+                    return rand == 0 ? new Item(ItemID.VampireFrogStaff) : new Item(ItemID.HornetStaff);
                 case ItemID.BoneWhip:
-                    return ItemID.ImpStaff;
+                    return new Item(ItemID.ImpStaff);
                 case ItemID.FireWhip:
                     rand = Main.rand.Next(1);
-                    return rand == 0 ? ItemID.SpiderStaff : ItemID.PirateStaff;
+                    return rand == 0 ? new Item(ItemID.SpiderStaff) : new Item(ItemID.PirateStaff);
                 case ItemID.CoolWhip:
                     rand = Main.rand.Next(1);
-                    return rand == 0 ? ItemID.SanguineStaff : ItemID.Smolstar;
+                    return rand == 0 ? new Item(ItemID.SanguineStaff) : new Item(ItemID.Smolstar);
                 case ItemID.SwordWhip:
                     rand = Main.rand.Next(1);
-                    return rand == 0 ? ItemID.OpticStaff : ItemID.PygmyStaff;
+                    return rand == 0 ? new Item(ItemID.OpticStaff) : new Item(ItemID.PygmyStaff);
                 case ItemID.ScytheWhip:
                     rand = Main.rand.Next(1);
-                    return rand == 0 ? ItemID.DeadlySphereBanner : ItemID.RavenStaff;
+                    return rand == 0 ? new Item(ItemID.DeadlySphereBanner) : new Item(ItemID.RavenStaff);
                 case ItemID.MaceWhip:
                     rand = Main.rand.Next(2);
-                    return rand == 0 ? ItemID.StormTigerStaff : rand == 1 ? ItemID.XenoStaff : ItemID.TempestStaff;
+                    return rand == 0 ? new Item(ItemID.StormTigerStaff) : rand == 1 ? new Item(ItemID.XenoStaff) : new Item(ItemID.TempestStaff);
                 case ItemID.RainbowWhip:
-                    return ItemID.EmpressBlade;
+                    return new Item(ItemID.EmpressBlade);
             }
-            return 0;
+            return new Item(0);
         }
 
         public static List<int> getAllRandomItems() {

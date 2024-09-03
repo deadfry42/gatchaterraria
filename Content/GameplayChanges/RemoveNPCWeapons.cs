@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Terraria.GameContent.ItemDropRules;
 using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
-namespace badgatchagame.Content.Removals
+namespace badgatchagame.Content.GameplayChanges
 {
     public class RemoveNPCWeapons : GlobalNPC
     {

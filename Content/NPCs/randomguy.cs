@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
-using badgatchagame.Content.PlayerObjects;
-using badgatchagame.Content.Randomisation;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Events;
-using static badgatchagame.Content.Randomisation.RandomItemsLists;
 using Terraria.Audio;
+
+using badgatchagame.Content.PlayerObjects;
+using badgatchagame.Content.Randomisation;
+using static badgatchagame.Content.Randomisation.RandomItemsLists;
+using badgatchagame.Content.Items.Tickets;
+using System.Text;
 
 namespace badgatchagame.Content.NPCs
 { 
@@ -16,7 +19,7 @@ namespace badgatchagame.Content.NPCs
 	{
         private static bool hasntcomplainedyet = true;
         private static readonly string invalidString = "Something's gone wrong. I've forgotten what I was going to say. Sorry about that!";
-
+        
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 25;
@@ -28,6 +31,16 @@ namespace badgatchagame.Content.NPCs
             NPCID.Sets.AttackAverageChance[NPC.type] = 0;
             NPCID.Sets.HatOffsetY[NPC.type] = 4;
             base.SetStaticDefaults();
+
+            // Support for DialogueTweak mod
+            DialogueTweakHelper.ReplaceButtonIcon(
+                DialogueTweakHelper.ReplacementType.Shop,
+                ModContent.NPCType<randomguy>(),
+                "badgatchagame/Content/NPCs/blank");
+            DialogueTweakHelper.ReplaceButtonIcon(
+                DialogueTweakHelper.ReplacementType.Extra,
+                ModContent.NPCType<randomguy>(),
+                "badgatchagame/Content/NPCs/blank");
         }
 
         public override void SetDefaults()
@@ -50,6 +63,20 @@ namespace badgatchagame.Content.NPCs
             return true;
         }
 
+        private static bool PlayerHasCoupon() {
+            if (!Main.expertMode) return false;
+            Player plr = Main.player[Main.myPlayer];
+            for (int i = 0; i < plr.inventory.Length; i++) {
+                if (plr.inventory[i].type == ModContent.ItemType<b1g1f>()) return true;
+            }
+            return false;
+        }
+
+        private static void TakePlayerCoupon() {
+            Player plr = Main.player[Main.myPlayer];
+            if (plr.FindItem(ModContent.ItemType<b1g1f>()) > -1) plr.inventory[plr.FindItem(ModContent.ItemType<b1g1f>())] = new Item(ItemID.None);
+        }
+
         private static bool PlayerInventoryIsFull() {
             Player plr = Main.player[Main.myPlayer];
             int available = 0;
@@ -60,30 +87,101 @@ namespace badgatchagame.Content.NPCs
             return !(available > 1); // 2 slots available
         }
 
+        private static void FilterPlayerInventory() {
+            Player plr = Main.player[Main.myPlayer];
+            foreach (var item in getAllRandomItems()) {
+                int itemSlot = plr.FindItem(item);
+                while (itemSlot > -1) {
+                    plr.inventory[itemSlot] = new Item(ItemID.None);
+                    itemSlot = plr.FindItem(item);
+                }
+            }
+        }
+
+        private static List<int> GetFilteredCurrentProgressionList() {
+            List<int> cpl = getCurrentProgressionList();
+            Player plr = Main.player[Main.myPlayer];
+            RandomPlayer mplr = plr.GetModPlayer<RandomPlayer>();
+            if (mplr.ClassChosen > -1) {
+                // filter!!
+                return ChooseRandomItem.FilterWeaponType(cpl, mplr.ClassChosen);
+            } else {
+                return cpl;
+            }
+        }
+
+        private static int GetFilteredRandomItemID() {
+            Player plr = Main.player[Main.myPlayer];
+            RandomPlayer mplr = plr.GetModPlayer<RandomPlayer>();
+            if (mplr.ClassChosen > -1) {
+                // filter!!
+                List<int> itemPool = GetFilteredCurrentProgressionList();
+                int index = Main.rand.Next(itemPool.Count);
+                int chosenID = itemPool[index];
+                return chosenID;
+            } else {
+                return ChooseRandomItem.GetRandomItemID();
+            }
+        }
+
         public override void OnChatButtonClicked(bool firstButton, ref string shopName)
         {
+            Player plr = Main.player[Main.myPlayer];
+            RandomPlayer mplr = plr.GetModPlayer<RandomPlayer>();
             if (firstButton) {
-                int chosenID = ChooseRandomItem.GetRandomItemID();
+                // first button
+                
+                if (mplr.CouponWeapon1 > ItemID.None && mplr.CouponWeapon2 > ItemID.None) {
+                    Item couponWeaponChosen = new(mplr.CouponWeapon1);
+                    if (plr.CanAcceptItemIntoInventory(couponWeaponChosen) && !PlayerInventoryIsFull()) {
+                        FilterPlayerInventory();
+                        SoundEngine.PlaySound(SoundID.Item37);
+                        plr.GetItem(Main.myPlayer, couponWeaponChosen, GetItemSettings.ItemCreatedFromItemUsage);
+                        Item accompanyingItem = getAccompanyingItemIfExists(mplr.CouponWeapon1);
+                        int accompanyingItemStack = accompanyingItem.stack; // this fixes a bug where the stack is incorrectly set idfk why 
+                        if (accompanyingItem.type > ItemID.None) {
+                            plr.GetItem(Main.myPlayer, accompanyingItem, GetItemSettings.ItemCreatedFromItemUsage);
+                            Main.npcChatText = GetDualWeaponObtainedText(couponWeaponChosen.Name, mplr.CouponWeapon1, accompanyingItem.Name, accompanyingItem.type, accompanyingItemStack);
+                        } else {
+                            Main.npcChatText = GetWeaponObtainedText(couponWeaponChosen.Name, mplr.CouponWeapon1);
+                        }
+                    } else {
+                        Main.npcChatText = GetWeaponDeniedText(1);
+                    }
+
+                    mplr.CouponWeapon1 = ItemID.None;
+                    mplr.CouponWeapon2 = ItemID.None;
+
+                    return;
+                }
+                int chosenID = GetFilteredRandomItemID();
                 Item chosen = new(chosenID);
-                Player plr = Main.player[Main.myPlayer];
+                
                 double RerollPrice = GetAdjustedPlayerRerollPrice();
                 
                 if (plr.CanAcceptItemIntoInventory(chosen) && !PlayerInventoryIsFull()) {
                     if (PlayerIsEligableForHardmodeDiscount() || plr.BuyItem(Item.buyPrice(gold: (int)RerollPrice))) {   
-                        foreach (var item in getAllRandomItems()) {
-                            int itemSlot = plr.FindItem(item);
-                            while (itemSlot > -1) {
-                                plr.inventory[itemSlot] = new Item(0);
-                                itemSlot = plr.FindItem(item);
+                        if (PlayerHasCoupon()) {
+                            SoundEngine.PlaySound(SoundID.Coins);
+                            TakePlayerCoupon();
+                            int chosenID2 = GetFilteredRandomItemID();
+                            while (chosenID == chosenID2) {
+                                chosenID2 = GetFilteredRandomItemID();
                             }
+                            mplr.CouponWeapon1 = chosenID;
+                            mplr.CouponWeapon2 = chosenID2;
+                            Item chosen2 = new(chosenID2);
+                            Main.npcChatText = GetCouponUsedText(chosen.Name, chosenID, chosen2.Name, chosenID2);
+                            return;
                         }
+                        FilterPlayerInventory();
                         SoundEngine.PlaySound(SoundID.Item37);
                         plr.GetItem(Main.myPlayer, chosen, GetItemSettings.ItemCreatedFromItemUsage);
-                        int accompanyingItemId = getAccompanyingItemIdIfExists(chosenID);
-                        Item accompanyingItem = new Item(accompanyingItemId);
-                        if (accompanyingItemId > 0) {
+                        Item accompanyingItem = getAccompanyingItemIfExists(chosenID);
+                        int accompanyingItemStack = accompanyingItem.stack; // this fixes a bug where the stack is incorrectly set idfk why 
+                        if (accompanyingItem.type > ItemID.None) {
                             plr.GetItem(Main.myPlayer, accompanyingItem, GetItemSettings.ItemCreatedFromItemUsage);
-                            Main.npcChatText = GetDualWeaponObtainedText(chosen.Name, chosenID, accompanyingItem.Name, accompanyingItemId);
+                            Main.npcChatText = GetDualWeaponObtainedText(chosen.Name, chosenID, accompanyingItem.Name, accompanyingItem.type, accompanyingItemStack);
                         } else {
                             Main.npcChatText = GetWeaponObtainedText(chosen.Name, chosenID);
                         }
@@ -111,6 +209,31 @@ namespace badgatchagame.Content.NPCs
                     return;
                 }
             } else {
+                // second button
+                if (mplr.CouponWeapon1 > ItemID.None && mplr.CouponWeapon2 > ItemID.None) {
+                    Item couponWeaponChosen = new(mplr.CouponWeapon2);
+                    if (plr.CanAcceptItemIntoInventory(couponWeaponChosen) && !PlayerInventoryIsFull()) {
+                        FilterPlayerInventory();
+                        SoundEngine.PlaySound(SoundID.Item37);
+                        plr.GetItem(Main.myPlayer, couponWeaponChosen, GetItemSettings.ItemCreatedFromItemUsage);
+                        Item accompanyingItem = getAccompanyingItemIfExists(mplr.CouponWeapon2);
+                        int accompanyingItemStack = accompanyingItem.stack; // this fixes a bug where the stack is incorrectly set idfk why 
+                        if (accompanyingItem.type > ItemID.None) {
+                            plr.GetItem(Main.myPlayer, accompanyingItem, GetItemSettings.ItemCreatedFromItemUsage);
+                            Main.npcChatText = GetDualWeaponObtainedText(couponWeaponChosen.Name, mplr.CouponWeapon2, accompanyingItem.Name, accompanyingItem.type, accompanyingItemStack);
+                        } else {
+                            Main.npcChatText = GetWeaponObtainedText(couponWeaponChosen.Name, mplr.CouponWeapon2);
+                        }
+                    } else {
+                        Main.npcChatText = GetWeaponDeniedText(1);
+                    }
+
+                    mplr.CouponWeapon1 = ItemID.None;
+                    mplr.CouponWeapon2 = ItemID.None;
+
+                    return;
+                }
+
                 Main.npcChatText = GetStockText();
             }
         }
@@ -124,7 +247,7 @@ namespace badgatchagame.Content.NPCs
         private static double GetAdjustedPlayerRerollPrice() {
             Player plr = Main.player[Main.myPlayer];
             double RerollPrice = plr.GetModPlayer<RandomPlayer>().RerollPrice;
-            if (LanternNight.LanternsUp) RerollPrice -= RerollPrice / 5;
+            if (LanternNight.LanternsUp) RerollPrice -= RerollPrice / 10; // 90% of the full price, 10% off
             return RerollPrice; 
         }
 
@@ -132,7 +255,7 @@ namespace badgatchagame.Content.NPCs
             Player plr = Main.player[Main.myPlayer];
             double newPrice = plr.GetModPlayer<RandomPlayer>().RerollPrice;
 
-            if (newPrice <= 1) {
+            if (newPrice <= 0) {
                 // got this weapon for free
                 // what a stinky loser.
 
@@ -258,63 +381,75 @@ namespace badgatchagame.Content.NPCs
         public override List<string> SetNPCNameList()
         {
             return [
-                "Jake",
-                "Sir Slushington IV",
-                "John",
-                "William",
-                "Joseph",
-                "Harry",
-                "Sebastian",
-                "Jack",
-                "Phoebe",
-                "Walter",
-                "Jesse",
-                "Edward",
-                "Daniel",
-                "Smith",
-                "Reagan",
-                "Johnathon",
-                "Chad",
-                "Wael", //waeland confirmed!??!?!!?
-                "Brock",
-                "Lysander",
+                "Edith",
                 "Mathias",
-                "Catherine",
+                "Wael", // waeland confirmed!1!!1
+                "Sir Slushington IV",
+                "Lysander",
+                "Daniel",
+                "Edward",
+                "Walter",
+                "Sebastian",
+                "Joseph",
+                "Chad",
+                "Smith",
             ];
         }
 
+
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = "Spin new item";
-            button2 = "Price";
+            Player plr = Main.player[Main.myPlayer];
+            RandomPlayer mplr = plr.GetModPlayer<RandomPlayer>();
+            if (mplr.CouponWeapon1 > ItemID.None && mplr.CouponWeapon2 > ItemID.None) {
+                button = "[i:"+mplr.CouponWeapon1+"] "+new Item(mplr.CouponWeapon1).Name;
+                button2 = "[i:"+mplr.CouponWeapon2+"] "+new Item(mplr.CouponWeapon2).Name;
+            } else {
+                button = "Spin new item";
+                button2 = "Price";
+            }
         }
 
-        private static string GetDualWeaponObtainedText(string WeaponName, int WeaponType, string Weapon2Name, int Weapon2Type)
+        private static string GetCouponUsedText(string WeaponName, int WeaponType, string Weapon2Name, int Weapon2Type)
+        {
+            return Main.rand.Next(6) switch
+                {
+                    0 => "I've accepted your coupon. You can choose to take either this [item:"+WeaponType+"] "+WeaponName+" or this [item:"+Weapon2Type+"] "+Weapon2Name+".",
+                    1 => "Great! Now choose between this [item:"+WeaponType+"] "+WeaponName+" or this [item:"+Weapon2Type+"] "+Weapon2Name+".",
+                    2 => "It's valid! Would you like to take this [item:"+WeaponType+"] "+WeaponName+" or this [item:"+Weapon2Type+"] "+Weapon2Name+"?",
+                    3 => "I've found these two weapons for you, a [item:"+WeaponType+"] "+WeaponName+" and a [item:"+Weapon2Type+"] "+Weapon2Name+". Which one will you take?",
+                    4 => "Coupon accepted. Take my [item:"+WeaponType+"] "+WeaponName+" or my [item:"+Weapon2Type+"] "+Weapon2Name+".",
+                    5 => "Phew, it wasn't counterfit. Take this [item:"+WeaponType+"] "+WeaponName+" or this [item:"+Weapon2Type+"] "+Weapon2Name+".",
+                    _ => invalidString,
+                };
+        }
+
+        private static string GetDualWeaponObtainedText(string WeaponName, int WeaponType, string Weapon2Name, int Weapon2Type, int Weapon2Stack)
         {
             double RerollPrice = GetAdjustedPlayerRerollPrice();
-            if (RerollPrice <= 1) {
+            if (RerollPrice <= 0) {
                 //first time
                 return Main.rand.Next(3) switch // only 3 cuz it's less common
                 {
-                    0 => "Here's your free [item:"+WeaponType+"] "+WeaponName+", and a complimentary [item:"+Weapon2Type+"] "+Weapon2Name+"!",
-                    1 => "Take good care of your first [item:"+WeaponType+"] "+WeaponName+" with [item:"+Weapon2Type+"] "+Weapon2Name+"!",
-                    2 => "I found the perfect combination of a [item:"+WeaponType+"] "+WeaponName+" & [item:"+Weapon2Type+"] "+Weapon2Name+"!",
+                    0 => "Here's your free [item:"+WeaponType+"] "+WeaponName+", and a complimentary [i/s"+Weapon2Stack+":"+Weapon2Type+"] "+Weapon2Name+"!",
+                    1 => "Take good care of your first [item:"+WeaponType+"] "+WeaponName+" with [i/s"+Weapon2Stack+":"+Weapon2Type+"] "+Weapon2Name+"!",
+                    2 => "I found the perfect combination of a [item:"+WeaponType+"] "+WeaponName+" & [i/s"+Weapon2Stack+":"+Weapon2Type+"] "+Weapon2Name+"!",
                     _ => invalidString,
                 };
             } else if (PlayerIsEligableForHardmodeDiscount()) {
                 return Main.rand.Next(3) switch // only 3 cuz it's less common
                 {
-                    0 => "Here's your welcoming [item:"+WeaponType+"] "+WeaponName+" with [item:"+Weapon2Type+"] "+Weapon2Name+"! Thank you again!",
-                    1 => "I entrust you with this [item:"+WeaponType+"] "+WeaponName+" with a [item:"+Weapon2Type+"] "+Weapon2Name+"! Congratulations!",
-                    2 => "Congratulations! Here's a [item:"+WeaponType+"] "+WeaponName+" with a [item:"+Weapon2Type+"] "+Weapon2Name+"!",
+                    0 => "Here's your welcoming [item:"+WeaponType+"] "+WeaponName+" with [i/s"+Weapon2Stack+":"+Weapon2Type+"] "+Weapon2Name+"! Thank you again!",
+                    1 => "I entrust you with this [item:"+WeaponType+"] "+WeaponName+" with a [i/s"+Weapon2Stack+":"+Weapon2Type+"] "+Weapon2Name+"! Congratulations!",
+                    2 => "Congratulations! Here's a [item:"+WeaponType+"] "+WeaponName+" with a [i/s"+Weapon2Stack+":"+Weapon2Type+"] "+Weapon2Name+"!",
                     _ => invalidString,
                 };
             } else {
                 return Main.rand.Next(3) switch // only 3 cuz it's less common
                 {
-                    0 => "I've just found the perfect combination, a [item:"+WeaponType+"] "+WeaponName+" with [item:"+Weapon2Type+"] "+Weapon2Name+"!",
-                    1 => "Have fun with this [item:"+WeaponType+"] "+WeaponName+" with a free [item:"+Weapon2Type+"] "+Weapon2Name+"!",
-                    2 => "I found this [item:"+WeaponType+"] "+WeaponName+" and [item:"+Weapon2Type+"] "+Weapon2Name+" just for you!",
+                    0 => "I've just found the perfect combination, a [item:"+WeaponType+"] "+WeaponName+" with [i/s"+Weapon2Stack+":"+Weapon2Type+"] "+Weapon2Name+"!",
+                    1 => "Have fun with this [item:"+WeaponType+"] "+WeaponName+" with a free [i/s"+Weapon2Stack+":"+Weapon2Type+"] "+Weapon2Name+"!",
+                    2 => "I found this [item:"+WeaponType+"] "+WeaponName+" and [i/s"+Weapon2Stack+":"+Weapon2Type+"] "+Weapon2Name+" just for you!",
                     _ => invalidString,
                 };
             }
@@ -323,7 +458,7 @@ namespace badgatchagame.Content.NPCs
         private static string GetWeaponObtainedText(string WeaponName, int WeaponType)
         {
             double RerollPrice = GetAdjustedPlayerRerollPrice();
-            if (RerollPrice <= 1) {
+            if (RerollPrice <= 0) {
                 //first time
                 return Main.rand.Next(6) switch
                 {
@@ -362,12 +497,12 @@ namespace badgatchagame.Content.NPCs
 
         private static string GetStockText()
         {
-            List<int> pool = getCurrentProgressionList();
+            List<int> pool = GetFilteredCurrentProgressionList();
             int stock = pool.Count;
 
             double RerollPrice = GetAdjustedPlayerRerollPrice();
 
-            if (RerollPrice <= 1) {
+            if (RerollPrice <= 0) {
                 return Main.rand.Next(6) switch
                 {
                     0 => "I can give you only one of my "+stock+" weapons for free! The rest you need to pay for.",
@@ -393,12 +528,12 @@ namespace badgatchagame.Content.NPCs
                 if (LanternNight.LanternsUp) {
                     return Main.rand.Next(6) switch
                     {
-                        0 => "I have about "+stock+" weapons for only "+Readable+"! 20% off!",
-                        1 => "Because of your 20% off, you only have to spend "+Readable+" to get one of my "+stock+" weapons!",
-                        2 => "If you give me "+Readable+", you get get one of my "+stock+" weapons! That's 20% less than usual!",
-                        3 => "Thats right, you have 20% off! For only "+Readable+", you can get one of these "+stock+" weapons!",
-                        4 => "20% off tonight! My "+stock+" weapons only cost "+Readable+"!",
-                        5 => "You have a 20% discount! That means my "+stock+" weapons only cost "+Readable+" tonight!",
+                        0 => "I have about "+stock+" weapons for only "+Readable+"! 10% off!",
+                        1 => "Because of your 10% off, you only have to spend "+Readable+" to get one of my "+stock+" weapons!",
+                        2 => "If you give me "+Readable+", you get get one of my "+stock+" weapons! That's 10% less than usual!",
+                        3 => "Thats right, you have 10% off! For only "+Readable+", you can get one of these "+stock+" weapons!",
+                        4 => "10% off tonight! My "+stock+" weapons only cost "+Readable+"!",
+                        5 => "You have a 10% discount! That means my "+stock+" weapons only cost "+Readable+" tonight!",
                         _ => invalidString,
                     };
                 } else {
@@ -446,7 +581,7 @@ namespace badgatchagame.Content.NPCs
                     };
 
                 default:
-                    return "Error - unhandled exception, denial - code "+reasonCode+". This is a bug.";
+                    return "Error - unhandled exception, denial - code "+reasonCode+". This is likely a bug.";
             }
         }
 
@@ -454,7 +589,18 @@ namespace badgatchagame.Content.NPCs
         {
             hasntcomplainedyet = true;
             double RerollPrice = GetAdjustedPlayerRerollPrice();
-            if (RerollPrice <= 1) {
+            Player plr = Main.player[Main.myPlayer];
+            RandomPlayer mplr = plr.GetModPlayer<RandomPlayer>();
+            if (mplr.CouponWeapon1 > ItemID.None && mplr.CouponWeapon2 > ItemID.None) {
+                return Main.rand.Next(4) switch
+                {
+                    0 => "Hey! Don't leave me like that! You still have to decide!",
+                    1 => "Don't leave me when i'm offering you something! Choose something!",
+                    2 => "That's rude! Don't leave me while i'm offering you quality weapons. Choose one!",
+                    3 => "I should reconsider if I should even give you a weapon. Choose one before I change my mind.",
+                    _ => invalidString,
+                };
+            } else if (RerollPrice <= 0) {
                 //first time
                 return Main.rand.Next(8) switch
                 {
@@ -469,15 +615,15 @@ namespace badgatchagame.Content.NPCs
                     _ => "i am actually a painter. they've kidnapped me and stripped me of my past life. don't believe the lies.",
                 };
             } else {
-                if (LanternNight.LanternsUp) {
+                if (PlayerIsEligableForHardmodeDiscount() && PlayerHasCoupon()) {
                     return Main.rand.Next(6) switch
                     {
-                        0 => "Tonight is a special night. 20% off!",
-                        1 => "Congratulations on beating a boss! 20% off for the rest of the night.",
-                        2 => "20% off tonight! Congratulations on winning the battle!",
-                        3 => "Tonight is 20% off, because you beat a boss! How brave.",
-                        4 => "Congrats! Let's celebrate by getting you a 20% discount!",
-                        5 => "Well done, I shall reward you with a 20% discount!",
+                        0 => "You are a brave warrior. Care for a free weapon? 2 free weapons, even! You have a coupon.",
+                        1 => "Congratulations! Would you like two whole free weapons? Your coupon makes these weapons free!",
+                        2 => "Welcome to hard mode! Want 2 new weapons for free to start your hardmode journey, thanks to that coupon?",
+                        3 => "What a wonderful achievement! I think that deserves a free weapon! No, 2 free weapons!",
+                        4 => "Well done! You deserve 2 whole free weapons! Thanks to your coupon!",
+                        5 => "Welcome to hard mode! I see you also have a coupon, I shall give you 2 free weapons!",
                         _ => invalidString,
                     };
                 } else if (PlayerIsEligableForHardmodeDiscount()) {
@@ -489,6 +635,39 @@ namespace badgatchagame.Content.NPCs
                         3 => "What a wonderful achievement! I think that deserves a free weapon!",
                         4 => "Well done! You deserve a free weapon! I have new ones..!",
                         5 => "How was the battle? You must've fought well. I'll reward you with a free weapon!",
+                        _ => invalidString,
+                    };
+                } else if (LanternNight.LanternsUp && PlayerHasCoupon()) {
+                    return Main.rand.Next(6) switch
+                    {
+                        0 => "Tonight is a special night. 10% off! And a buy 1 get 1 free coupon!",
+                        1 => "10% off, and a buy 1 get 1 free coupon! You must be lucky.",
+                        2 => "10% off tonight! With your coupon, thats 2 weapons with a lower price! Bargain!",
+                        3 => "You are so brave, I will happily give you 10% off and accept your coupon!",
+                        4 => "Congrats! Let's celebrate by accepting your coupon and giving you a 10% discount!",
+                        5 => "Well done, I shall reward you with a 10% discount and accepting your coupon!",
+                        _ => invalidString,
+                    };
+                } else if (LanternNight.LanternsUp) {
+                    return Main.rand.Next(6) switch
+                    {
+                        0 => "Tonight is a special night. 10% off!",
+                        1 => "Congratulations on beating a boss! 10% off for the rest of the night.",
+                        2 => "10% off tonight! Congratulations on winning the battle!",
+                        3 => "Tonight is 10% off, because you beat a boss! How brave.",
+                        4 => "Congrats! Let's celebrate by giving you a 10% discount!",
+                        5 => "Well done, I shall reward you with a 10% discount!",
+                        _ => invalidString,
+                    };
+                } else if (PlayerHasCoupon()) {
+                    return Main.rand.Next(6) switch
+                    {
+                        0 => "Is that.. a buy 1 get 1 free coupon? Indeed it is. Buy something, quickly!",
+                        1 => "Wow, a buy 1 get 1 free coupon! I will indeed accept this.",
+                        2 => "You can use your buy 1 get 1 free coupon here! Buy a weapon now!",
+                        3 => "You have.. a buy 1 get 1 free coupon? How amazing! I'll accept it!",
+                        4 => "Amazing! You have a buy 1 get 1 free coupon! I can happily accept it here!",
+                        5 => "Nice buy 1 get 1 free coupon! I'll accept it if you buy something from me!",
                         _ => invalidString,
                     };
                 } else {

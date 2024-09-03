@@ -18,6 +18,8 @@ btw, his prices increase overtime, and the weapons you get will likely be awful
 
 there are temporary ways to reduce the amount you pay, but im not gonna tell you - read the code lol ;)  
 
+additionally, there are ways to get a weapon you might want with certain items, which you will probably obtain during your playthrough  
+
 good luck :)  
 
 > [!NOTE]
@@ -28,6 +30,15 @@ in all seriousness, this mod is specifically designed to make you want to kill y
 ----------
 
 patch notes:
+
+version 1.1.0 -> various changes: (scope creep is crazy)  
+- Many ways to get a lower price and/or a good deal
+- Imposing restrictions to try to make weapons stay in your inventory
+- Add support for the [Dialogue Panel Rework](https://github.com/Cyrillya/DialogueTweak) mod by [Cyrillya](https://github.com/Cyrillya)  
+- Give ammo to weapons that need ammo
+- Reduced lantern night buff to only 10% off instead of 20% off
+- Fixed a few random item list issues
+- Other various improvements, tweaks and bug fixes  
 
 version 1.0.6 -> made summon weapons come with a whip and whips come with a summon weapon  
 version 1.0.5 -> made the missing weapons in chests be 1-10 gold coins  

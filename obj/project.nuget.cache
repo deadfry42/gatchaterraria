@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "ZqjQ28K4RDGdwgnMP7UqTeYRJnOvvp0QM5WUkPql4UDEd5ZkoLBE5QUv9Di3kbvw5IJfngjxLn9L2m8oC+G8uQ==",
+  "success": true,
+  "projectFilePath": "/home/nik/.local/share/Terraria/tModLoader/ModSources/badgatchagame/badgatchagame.csproj",
+  "expectedPackageFiles": [
+    "/home/nik/.nuget/packages/tmodloader.codeassist/0.1.5/tmodloader.codeassist.0.1.5.nupkg.sha512",
+    "/home/nik/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.7/microsoft.aspnetcore.app.ref.8.0.7.nupkg.sha512"
+  ],
+  "logs": []
+}

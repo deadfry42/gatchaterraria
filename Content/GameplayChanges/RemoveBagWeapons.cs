@@ -5,8 +5,9 @@ using Terraria.ID;
 using System.Collections.Generic;
 using badgatchagame.Content.PlayerObjects;
 using static badgatchagame.Content.Randomisation.RandomItemsLists;
+using badgatchagame.Content.Items.Tickets;
 
-namespace badgatchagame.Content.Removals
+namespace badgatchagame.Content.GameplayChanges
 {
     public class RemoveBagWeapons : GlobalItem
     {
@@ -18,13 +19,16 @@ namespace badgatchagame.Content.Removals
                     iterateItemDropRules(itemLoot, droptable, itemID);
                 }
             }
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<b1g1f>(), 10, 1, 1));
         }
+
 
         public override void OnConsumeItem(Item item, Player player)
         {
             if (item.type == ItemID.DemonHeart) {
                 Player plr = Main.player[Main.myPlayer];
                 plr.GetModPlayer<RandomPlayer>().Congrats = true;
+                Main.NewText("You hear cheers echoing from your NPCs...", 50, 255, 130);
                 base.OnConsumeItem(item, player);
             }
         }

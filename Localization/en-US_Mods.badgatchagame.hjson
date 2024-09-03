@@ -10,6 +10,62 @@ Items: {
 		DisplayName: Discount coupon
 		Tooltip: It has no expiration date.
 	}
+
+	brainwash: {
+		Tooltip:
+			'''
+			Makes the Retired Weaponsmith forget everything about you.
+			Only works at night.
+			[c/E11919:One time use.]
+			'''
+		DisplayName: Brainwash
+	}
+
+	meleeticket: {
+		Tooltip:
+			'''
+			Narrows your weapon selection to ONLY the Melee class.
+			Choose wisely, as you can [c/E11919:only choose once.]
+			'''
+		DisplayName: Melee class ticket
+	}
+
+	mageticket: {
+		Tooltip:
+			'''
+			Narrows your weapon selection to ONLY the Mage class.
+			Choose wisely, as you can [c/E11919:only choose once.]
+			'''
+		DisplayName: Mage class ticket
+	}
+
+	rangerticket: {
+		Tooltip:
+			'''
+			Narrows your weapon selection to ONLY the Ranged class.
+			Choose wisely, as you can [c/E11919:only choose once.]
+			'''
+		DisplayName: Ranger class ticket
+	}
+
+	summonerticket: {
+		Tooltip:
+			'''
+			Narrows your weapon selection to ONLY the Summoner class.
+			Choose wisely, as you can [c/E11919:only choose once.]
+			'''
+		DisplayName: Summoner class ticket
+	}
+
+	b1g1f: {
+		Tooltip:
+			'''
+			A special coupon that allows you to get 2 items for the price of 1!
+			Looks like it is accepted by your local Retired Weaponsmith.
+			No expiration date.
+			'''
+		DisplayName: Buy 1 get 1 free coupon
+	}
 }
 
 NPCs: {
@@ -17,14 +73,16 @@ NPCs: {
 		DisplayName: Retired Weaponsmith
 
 		TownNPCMood: {
-			Content: I am content. Thank you.
-			NoHome: Being homeless is a situation no weaponsmith wants to be in.
-			FarFromHome: Where's my home?
-			LoveSpace: Having plenty of space is amazing for a weaponsmith like me.
+			Content: I am perfectly fine, thank you for asking.
+			NoHome: I need a home, please!
+			FarFromHome: Where's my home? I'm missing my weapon collection!
+			LoveSpace: I love the space I have here, it's plentiful room for my gigantic weapon collection!
 			DislikeCrowded: There's too many people near my blazing hot iron!
-			HateCrowded: I cannot work with the amount of people here!
+			HateCrowded: It is simply impossible to live in a crowded place like this!
 			LikeNPC_Princess: I am taking a liking to {NPCName}.
 			Princess_LovesNPC: I am taking a liking to {NPCName}.
 		}
 	}
 }
+
+Conditions.NotInAClass: Mods.badgatchagame.Conditions.NotInAClass

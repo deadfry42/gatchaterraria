@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
-namespace badgatchagame.Content.Removals
+namespace badgatchagame.Content.GameplayChanges
 {
     public class RemoveChestWeapons : ModSystem
     {
