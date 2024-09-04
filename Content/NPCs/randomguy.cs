@@ -128,6 +128,7 @@ namespace badgatchagame.Content.NPCs
         {
             Player plr = Main.player[Main.myPlayer];
             RandomPlayer mplr = plr.GetModPlayer<RandomPlayer>();
+            Main.NewText(mplr.RerollPrice.ToString());
             if (firstButton) {
                 // first button
                 
@@ -160,7 +161,7 @@ namespace badgatchagame.Content.NPCs
                 double RerollPrice = GetAdjustedPlayerRerollPrice();
                 
                 if (plr.CanAcceptItemIntoInventory(chosen) && !PlayerInventoryIsFull()) {
-                    if (PlayerIsEligableForHardmodeDiscount() || plr.BuyItem(Item.buyPrice(gold: (int)RerollPrice))) {   
+                    if (PlayerIsEligableForHardmodeDiscount() || plr.BuyItem(Item.buyPrice(silver: (int)(RerollPrice*100)))) {   
                         if (PlayerHasCoupon()) {
                             SoundEngine.PlaySound(SoundID.Coins);
                             TakePlayerCoupon();
@@ -259,12 +260,13 @@ namespace badgatchagame.Content.NPCs
                 // got this weapon for free
                 // what a stinky loser.
 
-                newPrice = (double)Main.rand.Next(2);
+                newPrice = Main.rand.Next(5);
+                newPrice /= 10;
                 newPrice += 0.5D;
             } else {
                 double addPrice = 1D;
-                addPrice += Main.rand.Next(4);
-                addPrice *= ((double)Main.rand.Next(50)+75)/100D;
+                // addPrice += Main.rand.Next(4);
+                addPrice *= ((double)Main.rand.Next(10)+105)/100D;
                 newPrice += addPrice;
             }
 

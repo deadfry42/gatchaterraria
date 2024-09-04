@@ -31,6 +31,7 @@ in all seriousness, this mod is specifically designed to make you want to kill y
 
 patch notes:
 
+version 1.1.1 -> minor tweaks, such as lowering the price.
 version 1.1.0 -> various changes: (scope creep is crazy)  
 - Many ways to get a lower price and/or a good deal
 - Imposing restrictions to try to make weapons stay in your inventory

@@ -1,3 +1,4 @@
+using badgatchagame.Content.Items;
 using badgatchagame.Content.Items.Tickets;
 using badgatchagame.Content.PlayerObjects;
 using Terraria;
@@ -12,24 +13,19 @@ namespace badgatchagame.Content.GameplayChanges
 
         public override void ModifyShop(NPCShop shop)
         {
-            if (shop.NpcType == NPCID.Merchant) {
-                shop.Add<meleeticket>(Condition.DownedEyeOfCthulhu, NotInAClass);
-                shop.Add<rangerticket>(Condition.DownedEyeOfCthulhu, NotInAClass);
-                shop.Add<mageticket>(Condition.DownedEyeOfCthulhu, NotInAClass);
-                shop.Add<summonerticket>(Condition.DownedEyeOfCthulhu, NotInAClass);
-            }
-            base.ModifyShop(shop);
-        }
+            switch (shop.NpcType) {
+                case NPCID.Merchant:
+                    shop.Add<meleeticket>(Condition.DownedEowOrBoc, NotInAClass);
+                    shop.Add<rangerticket>(Condition.DownedEowOrBoc, NotInAClass);
+                    shop.Add<mageticket>(Condition.DownedEowOrBoc, NotInAClass);
+                    shop.Add<summonerticket>(Condition.DownedEowOrBoc, NotInAClass);
+                break;
 
-        public override void OnKill(NPC npc)
-        {
-            switch (npc.type) {
-                case NPCID.EaterofWorldsHead:
-                case NPCID.BrainofCthulhu:
-                    if (NPC.downedBoss2) return;
-                    Main.NewText("The merchant can now afford to sell a very important item!");
+                case NPCID.Wizard:
+                    shop.Add<brainwash>();
                 break;
             }
+            base.ModifyShop(shop);
         }
     }
 }
