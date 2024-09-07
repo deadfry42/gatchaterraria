@@ -13,10 +13,14 @@ using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
 namespace badgatchagame.Content.NPCs
 { 
+    // this is already pretty messy, just because there is a lot of unique interactions with this npc
+    // and lots of text
+    
     [AutoloadHead]
 	public class randomguy : ModNPC
 	{
         private static bool hasntcomplainedyet = true;
+        private static bool isGenerous = false;
         private static readonly string invalidString = "Something's gone wrong. I've forgotten what I was going to say. Sorry about that!";
         
         public override void SetStaticDefaults()
@@ -158,6 +162,8 @@ namespace badgatchagame.Content.NPCs
                 Item chosen = new(chosenID);
                 
                 double RerollPrice = GetAdjustedPlayerRerollPrice();
+
+                if (plr.discountEquipped) {Main.npcChatText = GetWeaponDeniedText(2); return;}
                 
                 if (plr.CanAcceptItemIntoInventory(chosen) && !PlayerInventoryIsFull()) {
                     if (PlayerIsEligableForHardmodeDiscount() || plr.BuyItem(Item.buyPrice(silver: (int)(RerollPrice*100)))) {   
@@ -248,7 +254,10 @@ namespace badgatchagame.Content.NPCs
         private static double GetAdjustedPlayerRerollPrice() {
             Player plr = Main.player[Main.myPlayer];
             double RerollPrice = plr.GetModPlayer<RandomPlayer>().RerollPrice;
-            if (LanternNight.LanternsUp) RerollPrice -= RerollPrice / 10; // 90% of the full price, 10% off
+            int discount = 0;
+            if (LanternNight.LanternsUp) discount += 10; // add 10% off
+            if (isGenerous) discount += 50;
+            if (discount > 0) RerollPrice -= RerollPrice / discount;
             return RerollPrice; 
         }
 
@@ -377,7 +386,12 @@ namespace badgatchagame.Content.NPCs
         }
 
 
-        // all text things below
+        //  _            _
+        // | |_ _____  _| |_
+        // | __/ _ \ \/ / __|
+        // | ||  __/>  <| |_
+        // \__\___/_/\_\\__|
+        // below
 
 
         public override List<string> SetNPCNameList()
@@ -499,12 +513,24 @@ namespace badgatchagame.Content.NPCs
 
         private static string GetStockText()
         {
+            Player plr = Main.player[Main.myPlayer];
             List<int> pool = GetFilteredCurrentProgressionList();
             int stock = pool.Count;
 
             double RerollPrice = GetAdjustedPlayerRerollPrice();
 
-            if (RerollPrice <= 0) {
+            if (plr.discountEquipped) {
+                return Main.rand.Next(6) switch
+                {
+                    0 => "I am not quoting any price tag if you're going to try to scam me with a fake discount card.",
+                    1 => "Are you still expecting me to give you a price with that counterfit discount card? No way!",
+                    2 => "I am not quoting anything until you get that fake discount card out of my sight!",
+                    3 => "No way I am going to give any prices with a fraudster with a fake discount card!",
+                    4 => "Don't even try to ask me anything while holding that fake discount card!",
+                    5 => "There is no way I am going to give you any price quotes while you hold that fake discount card!",
+                    _ => invalidString,
+                };
+            } else if (RerollPrice <= 0) {
                 return Main.rand.Next(6) switch
                 {
                     0 => "I can give you only one of my "+stock+" weapons for free! The rest you need to pay for.",
@@ -527,7 +553,18 @@ namespace badgatchagame.Content.NPCs
             } else {
                 List<int> CurrencyList = ConvertGoldToCurrencyList(RerollPrice);
                 String Readable = ConvertCurrencyListToString(CurrencyList);
-                if (LanternNight.LanternsUp) {
+                if (LanternNight.LanternsUp && isGenerous) {
+                    return Main.rand.Next(6) switch
+                    {
+                        0 => "I have about "+stock+" weapons for only "+Readable+"! 60% off!",
+                        1 => "Because of your 60% off, you only have to spend "+Readable+" to get one of my "+stock+" weapons!",
+                        2 => "If you give me "+Readable+", you get get one of my "+stock+" weapons! That's 60% less than usual!",
+                        3 => "Thats right, you have 60% off! For only "+Readable+", you can get one of these "+stock+" weapons!",
+                        4 => "60% off tonight! My "+stock+" weapons only cost "+Readable+"!",
+                        5 => "You have a 60% discount! That means my "+stock+" weapons only cost "+Readable+" tonight!",
+                        _ => invalidString,
+                    };
+                } else if (LanternNight.LanternsUp) {
                     return Main.rand.Next(6) switch
                     {
                         0 => "I have about "+stock+" weapons for only "+Readable+"! 10% off!",
@@ -536,6 +573,17 @@ namespace badgatchagame.Content.NPCs
                         3 => "Thats right, you have 10% off! For only "+Readable+", you can get one of these "+stock+" weapons!",
                         4 => "10% off tonight! My "+stock+" weapons only cost "+Readable+"!",
                         5 => "You have a 10% discount! That means my "+stock+" weapons only cost "+Readable+" tonight!",
+                        _ => invalidString,
+                    };
+                } else if (isGenerous) {
+                    return Main.rand.Next(6) switch
+                    {
+                        0 => "I have about "+stock+" weapons for only "+Readable+"! 50% off!",
+                        1 => "Because of your 50% off, you only have to spend "+Readable+" to get one of my "+stock+" weapons!",
+                        2 => "If you give me "+Readable+", you get get one of my "+stock+" weapons! That's 50% less than usual!",
+                        3 => "Thats right, you have 50% off! For only "+Readable+", you can get one of these "+stock+" weapons!",
+                        4 => "50% off tonight! My "+stock+" weapons only cost "+Readable+"!",
+                        5 => "You have a 50% discount! That means my "+stock+" weapons only cost "+Readable+" tonight!",
                         _ => invalidString,
                     };
                 } else {
@@ -582,6 +630,18 @@ namespace badgatchagame.Content.NPCs
                         _ => invalidString,
                     };
 
+                case 2: // discount card
+                    return Main.rand.Next(6) switch
+                    {
+                        0 => "I'm not going to sell you anything while you're using that fake discount card!",
+                        1 => "And you think I'm doing business with a fraudster? Not with that discount card, I'm not!",
+                        2 => "Get that fake discount card out of my sight before I call the police.",
+                        3 => "I am not doing business with someone with a fake discount card.",
+                        4 => "Get rid of that fake discount card immediately or else no weapons for you!",
+                        5 => "That fake discount card is not accepted here! Get rid of it!",
+                        _ => invalidString,
+                    };
+
                 default:
                     return "Error - unhandled exception, denial - code "+reasonCode+". This is likely a bug.";
             }
@@ -589,21 +649,66 @@ namespace badgatchagame.Content.NPCs
 
         public override string GetChat()
         {
+            isGenerous = Main.rand.Next(0, 8191) == 4096; // 1/8192 chance to get 50% off (no this is not a shiny reference)
             hasntcomplainedyet = true;
             double RerollPrice = GetAdjustedPlayerRerollPrice();
             Player plr = Main.player[Main.myPlayer];
             RandomPlayer mplr = plr.GetModPlayer<RandomPlayer>();
+
+            // prority system:
+            // 1 - coupon choosing
+            // 2 - discount card && generous
+            // 3 - discount card
+            // 4 - first roll
+            // 5 - hm discount && coupon
+            // 6 - hm discount
+            // 7 - lantern night && coupon && generous
+            // 8 - lantern night && coupon
+            // 9 - lantern night && generous
+            // 10 - lantern night
+            // 11 - coupon && generous
+            // 12 - coupon
+            // 13 - generous
+            // 14 - normal chat
+
             if (mplr.CouponWeapon1 > ItemID.None && mplr.CouponWeapon2 > ItemID.None) {
-                return Main.rand.Next(4) switch
+                // coupon choosing (1)
+                isGenerous = false;
+                return Main.rand.Next(6) switch
                 {
                     0 => "Hey! Don't leave me like that! You still have to decide!",
                     1 => "Don't leave me when i'm offering you something! Choose something!",
                     2 => "That's rude! Don't leave me while i'm offering you quality weapons. Choose one!",
                     3 => "I should reconsider if I should even give you a weapon. Choose one before I change my mind.",
+                    4 => "Choose something! Don't leave me like that!",
+                    5 => "That is so disrespectful. Choose something before i change my mind.",
+                    _ => invalidString,
+                };
+            } else if (plr.discountEquipped && isGenerous) {
+                // discount && generous (2)
+                isGenerous = false;
+                return Main.rand.Next(4) switch
+                {
+                    0 => "You know what? I was going to be generous to you today, but that fake discount card have just put me off.",
+                    1 => "I was planning to be generous to you today, and then you show up with that counterfit discount card.",
+                    2 => "Wow. Really? A fake discount card? I was going to be generous today, but never mind!",
+                    3 => "I was going to be generous today, but you've just put me off with that fake discount card.",
+                    _ => invalidString,
+                };
+            } else if (plr.discountEquipped) {
+                // discount (3)
+                isGenerous = false;
+                return Main.rand.Next(4) switch
+                {
+                    0 => "You think you can fool me with your counterfeit discount card? Nope.",
+                    1 => "Don't try using that discount card, it won't work here!",
+                    2 => "Wow. Not even trying to hide that counterfeit discount card there.",
+                    3 => "Are you trying to scam me? That discount card is obviously fake.",
                     _ => invalidString,
                 };
             } else if (RerollPrice <= 0) {
-                //first time
+                // first roll (4)
+                isGenerous = false;
                 return Main.rand.Next(8) switch
                 {
                     0 => "I have all of these weapons, want one for free?",
@@ -616,74 +721,131 @@ namespace badgatchagame.Content.NPCs
                     7 => "You look like you're in need of a free weapon.",
                     _ => "i am actually a painter. they've kidnapped me and stripped me of my past life. don't believe the lies.",
                 };
+            } else if (PlayerIsEligableForHardmodeDiscount() && PlayerHasCoupon()) {
+                // hm discount && coupon (5)
+                isGenerous = false;
+                return Main.rand.Next(6) switch
+                {
+                    0 => "You are a brave warrior. Care for a free weapon? 2 free weapons, even! You have a coupon.",
+                    1 => "Congratulations! Would you like two whole free weapons? Your coupon makes these weapons free!",
+                    2 => "Welcome to hard mode! Want 2 new weapons for free to start your hardmode journey, thanks to that coupon?",
+                    3 => "What a wonderful achievement! I think that deserves a free weapon! No, 2 free weapons!",
+                    4 => "Well done! You deserve 2 whole free weapons! Thanks to your coupon!",
+                    5 => "Welcome to hard mode! I see you also have a coupon, I shall give you 2 free weapons!",
+                    _ => invalidString,
+                };
+            } else if (PlayerIsEligableForHardmodeDiscount()) {
+                // hm discount (6)
+                isGenerous = false;
+                return Main.rand.Next(6) switch
+                {
+                    0 => "You are a brave warrior. Care for a free weapon?",
+                    1 => "Congratulations! Would you like a free weapon?",
+                    2 => "Welcome to hard mode! Want a new weapon for free?",
+                    3 => "What a wonderful achievement! I think that deserves a free weapon!",
+                    4 => "Well done! You deserve a free weapon! I have new ones..!",
+                    5 => "How was the battle? You must've fought well. I'll reward you with a free weapon!",
+                    _ => invalidString,
+                };
+            } else if (LanternNight.LanternsUp && PlayerHasCoupon() && isGenerous) {
+                // lantern night && coupon && generous (7)
+                return Main.rand.Next(6) switch
+                {
+                    0 => "The stars have aligned. I am celebrating, generous and you have a coupon. Would you like 60% off for 2 weapons?",
+                    1 => "How would you like 60% off for 2 whole weapons? Congratulations, and thank you for this coupon.",
+                    2 => "I'm feeling generous today. Thanks to you winning that battle, and that coupon, I am going to give you 60% off for 2 weapons.",
+                    3 => "Beautiful! You even have a coupon! You know what, i'm generous today... 60% off for 2 weapons, as my thank you.",
+                    4 => "Congratulations! I've decided to agree on 60% for 2 weapons, due to your coupon, the lantern night and that i'm generous today!",
+                    5 => "I'm feeling very generous today. Your coupon and your incredible achievement rewards you with 60% off for 2 weapons.",
+                    _ => invalidString,
+                };
+            } else if (LanternNight.LanternsUp && PlayerHasCoupon()) {
+                // lantern night && coupon (8)
+                isGenerous = false;
+                return Main.rand.Next(6) switch
+                {
+                    0 => "Tonight is a special night. 10% off! And a buy 1 get 1 free coupon!",
+                    1 => "10% off, and a buy 1 get 1 free coupon! You must be lucky.",
+                    2 => "10% off tonight! With your coupon, thats 2 weapons with a lower price! Bargain!",
+                    3 => "You are so brave, I will happily give you 10% off and accept your coupon!",
+                    4 => "Congrats! Let's celebrate by accepting your coupon and giving you a 10% discount!",
+                    5 => "Well done, I shall reward you with a 10% discount and accepting your coupon!",
+                    _ => invalidString,
+                };
+            } else if (LanternNight.LanternsUp && isGenerous) {
+                // lantern night && generous (9)
+                return Main.rand.Next(6) switch
+                {
+                    0 => "Wow, congrats on winning the fight! I'm feeling generous today, 60% off, just for the night!",
+                    1 => "Congratulations on beating a boss! 10% off, no, 60% off for the rest of the night.",
+                    2 => "You're so incredibly brave, I'm feeling generous today, I'll give you 60% off!",
+                    3 => "Tonight is 10% off, because you beat a boss! No, wait, 60% because i'm feeling generous today!",
+                    4 => "Congrats! Let's celebrate by giving you a 10%, no, 60% discount!",
+                    5 => "Well done, because I'm feeling generous, and that you beat a boss, I'll reward you with 60% off!",
+                    _ => invalidString,
+                };
+            } else if (LanternNight.LanternsUp) {
+                // lantern night (10)
+                isGenerous = false;
+                return Main.rand.Next(6) switch
+                {
+                    0 => "Tonight is a special night. 10% off!",
+                    1 => "Congratulations on beating a boss! 10% off for the rest of the night.",
+                    2 => "10% off tonight! Congratulations on winning the battle!",
+                    3 => "Tonight is 10% off, because you beat a boss! How brave.",
+                    4 => "Congrats! Let's celebrate by giving you a 10% discount!",
+                    5 => "Well done, I shall reward you with a 10% discount!",
+                    _ => invalidString,
+                };
+            } else if (PlayerHasCoupon() && isGenerous) {
+                // coupon (11)
+                return Main.rand.Next(6) switch
+                {
+                    0 => "Is that.. a buy 1 get 1 free coupon? Indeed it is. Buy something, quickly! I'll even give you a 50% discount on top!",
+                    1 => "Wow, a buy 1 get 1 free coupon! I'm feeling generous today, how about that coupon and a 50% discount?",
+                    2 => "You can use your buy 1 get 1 free coupon here! I'm feeling generous today, so I'll add a 50% discount on top!",
+                    3 => "You have.. a buy 1 get 1 free coupon? How amazing! You know what? 50% off, just because I'm feeling generous today.",
+                    4 => "Amazing! You have a buy 1 get 1 free coupon! I'll give you a 50% discount too, just because I'm feeling generous today.",
+                    5 => "Nice buy 1 get 1 free coupon! I'll accept it if you buy something from me! 50% off too, I'm feeling quite generous today.",
+                    _ => invalidString,
+                };
+            } else if (PlayerHasCoupon()) {
+                // coupon (12)
+                isGenerous = false;
+                return Main.rand.Next(6) switch
+                {
+                    0 => "Is that.. a buy 1 get 1 free coupon? Indeed it is. Buy something, quickly!",
+                    1 => "Wow, a buy 1 get 1 free coupon! I will indeed accept this.",
+                    2 => "You can use your buy 1 get 1 free coupon here! Buy a weapon now!",
+                    3 => "You have.. a buy 1 get 1 free coupon? How amazing! I'll accept it!",
+                    4 => "Amazing! You have a buy 1 get 1 free coupon! I can happily accept it here!",
+                    5 => "Nice buy 1 get 1 free coupon! I'll accept it if you buy something from me!",
+                    _ => invalidString,
+                };
+            } else if (isGenerous) {
+                // generous (13)
+                return Main.rand.Next(6) switch
+                {
+                    0 => "I have all of these powerful weapons. I'll even give you a 50% discount, just because I'm feeling generous today.",
+                    1 => "Want some weapons? Give me only one of your kidneys and we'll talk. 50% off, just because i'm generous today.",
+                    2 => "I heard you may need an upgrade. I can maybe give you one! Maybe even 50%, I'm feeling generous today!",
+                    3 => "C'mon, want a weapon? I have plenty to choose from! I'm feeling generous today, so I'll give you 50% off!",
+                    4 => "Would you like to buy a brand new weapon? I'm feeling generous today, so maybe 50% off?",
+                    5 => "Would you like to walk away with a stronger weapon? I'm feeling quite generous today, I'll give you 50% off!",
+                    _ => invalidString,
+                };
             } else {
-                if (PlayerIsEligableForHardmodeDiscount() && PlayerHasCoupon()) {
-                    return Main.rand.Next(6) switch
-                    {
-                        0 => "You are a brave warrior. Care for a free weapon? 2 free weapons, even! You have a coupon.",
-                        1 => "Congratulations! Would you like two whole free weapons? Your coupon makes these weapons free!",
-                        2 => "Welcome to hard mode! Want 2 new weapons for free to start your hardmode journey, thanks to that coupon?",
-                        3 => "What a wonderful achievement! I think that deserves a free weapon! No, 2 free weapons!",
-                        4 => "Well done! You deserve 2 whole free weapons! Thanks to your coupon!",
-                        5 => "Welcome to hard mode! I see you also have a coupon, I shall give you 2 free weapons!",
-                        _ => invalidString,
-                    };
-                } else if (PlayerIsEligableForHardmodeDiscount()) {
-                    return Main.rand.Next(6) switch
-                    {
-                        0 => "You are a brave warrior. Care for a free weapon?",
-                        1 => "Congratulations! Would you like a free weapon?",
-                        2 => "Welcome to hard mode! Want a new weapon for free?",
-                        3 => "What a wonderful achievement! I think that deserves a free weapon!",
-                        4 => "Well done! You deserve a free weapon! I have new ones..!",
-                        5 => "How was the battle? You must've fought well. I'll reward you with a free weapon!",
-                        _ => invalidString,
-                    };
-                } else if (LanternNight.LanternsUp && PlayerHasCoupon()) {
-                    return Main.rand.Next(6) switch
-                    {
-                        0 => "Tonight is a special night. 10% off! And a buy 1 get 1 free coupon!",
-                        1 => "10% off, and a buy 1 get 1 free coupon! You must be lucky.",
-                        2 => "10% off tonight! With your coupon, thats 2 weapons with a lower price! Bargain!",
-                        3 => "You are so brave, I will happily give you 10% off and accept your coupon!",
-                        4 => "Congrats! Let's celebrate by accepting your coupon and giving you a 10% discount!",
-                        5 => "Well done, I shall reward you with a 10% discount and accepting your coupon!",
-                        _ => invalidString,
-                    };
-                } else if (LanternNight.LanternsUp) {
-                    return Main.rand.Next(6) switch
-                    {
-                        0 => "Tonight is a special night. 10% off!",
-                        1 => "Congratulations on beating a boss! 10% off for the rest of the night.",
-                        2 => "10% off tonight! Congratulations on winning the battle!",
-                        3 => "Tonight is 10% off, because you beat a boss! How brave.",
-                        4 => "Congrats! Let's celebrate by giving you a 10% discount!",
-                        5 => "Well done, I shall reward you with a 10% discount!",
-                        _ => invalidString,
-                    };
-                } else if (PlayerHasCoupon()) {
-                    return Main.rand.Next(6) switch
-                    {
-                        0 => "Is that.. a buy 1 get 1 free coupon? Indeed it is. Buy something, quickly!",
-                        1 => "Wow, a buy 1 get 1 free coupon! I will indeed accept this.",
-                        2 => "You can use your buy 1 get 1 free coupon here! Buy a weapon now!",
-                        3 => "You have.. a buy 1 get 1 free coupon? How amazing! I'll accept it!",
-                        4 => "Amazing! You have a buy 1 get 1 free coupon! I can happily accept it here!",
-                        5 => "Nice buy 1 get 1 free coupon! I'll accept it if you buy something from me!",
-                        _ => invalidString,
-                    };
-                } else {
-                    return Main.rand.Next(6) switch
-                    {
-                        0 => "I have all of these powerful weapons. Want one?",
-                        1 => "Want some weapons? Give me two of your kidneys and we'll talk.",
-                        2 => "I heard you may need an upgrade. I can maybe give you one!",
-                        3 => "C'mon, want a weapon? I have plenty to choose from!",
-                        4 => "Would you like to buy a brand new weapon?",
-                        5 => "Wold you like to walk away with a stronger weapon? Buy one now!",
-                        _ => invalidString,
-                    };
-                }
+                // normal (14)
+                return Main.rand.Next(6) switch
+                {
+                    0 => "I have all of these powerful weapons. Want one?",
+                    1 => "Want some weapons? Give me two of your kidneys and we'll talk.",
+                    2 => "I heard you may need an upgrade. I can maybe give you one!",
+                    3 => "C'mon, want a weapon? I have plenty to choose from!",
+                    4 => "Would you like to buy a brand new weapon?",
+                    5 => "Would you like to walk away with a stronger weapon? Buy one now!",
+                    _ => invalidString,
+                };
             }
         }
 

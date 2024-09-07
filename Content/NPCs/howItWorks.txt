@@ -1,0 +1,75 @@
+This is a text document detailing exactly how randomguy (Retired Weaponsmith) works.
+
+last updated: 07/09/2024 DD/MM/YYYY
+
+DIALOGUE:
+the npc will tell you important information each time you talk to him. there are (11 * 6) + (2 * 4) + (8 * 1) = 82 different things he can say when simply interacting.
+There are seperate conditions that have to be accounted for, and that is why there are so many.
+This is the priority order, and explanation of what each condition is:
+1 - coupon choosing -> when you use a coupon, it prompts you to choose between 2 weapons. If you exit and interact with him again later, this one would work first before all of the others
+2 - discount card && generous -> when you have a discount card equipped and he is generous
+3 - discount card -> when you have a discount card equipped
+4 - first roll -> when you are going to get your first weapon
+5 - hm discount && coupon -> when you are getting your free weapon from the demon heart and you have a coupon
+6 - hm discount -> when you are getting your free weapon from the demon heart
+7 - lantern night && coupon && generous -> when you are getting 10% off from lantern night, 50% off because he's generous and you have a coupon
+8 - lantern night && coupon -> when you are getting 10% off from a lantern night, and you have a coupon
+9 - lantern night && generous -> when you are getting 10% off from a lantern night, and he's generous
+10 - lantern night -> when you are getting 10% off from a lantern night
+11 - coupon && generous -> when he's generous and you have a coupon
+12 - coupon -> when you have a coupon
+13 - generous -> when he's generous
+14 - normal chat -> normal chat
+
+MECHANICS:
+here are some conditions in which something will be different
+- coupon:
+the coupon refers to the "Buy 1 get 1 free coupon" you can get from boss bags in expert & master mode
+it allows you to pay for one item, and then get to choose between two.
+- hm discount:
+when you use a demon heart in expert & master mode, you get a free weapon.
+it allows you to get a free hard mode weapon at the start, to help you
+- lantern night:
+once you defeat a boss, the next night will be a lantern night
+the retired weaponsmith will give you a 10% discount when the lanterns are up
+- generous:
+every time you talk to the retired weaponsmith, there is a 1/8192 chance that he will be generous
+this means you will have 50% off, but if you exit the dialogue it will be rerolled
+unless you are incredibly lucky, it means that you will not have that 50% off anymore.
+- discount card:
+when you have a discount card equipped, he will refuse to sell you weapons.
+this is because there already exists a coupon.
+- arguing:
+this is when you spam the price button, in hopes of lowering the price.
+he will lower the price, but this can only happen 3 times throughout your playthrough
+- class tickets:
+these are tickets bought from the merchant which narrows your weapon options to only that class
+this is immensly useful for making sure you don't have to get new armour each time you get a new weapon
+- brainwash:
+this is a single use item which will wipe all of your data.
+it is a one time use throughout your playthrough.\
+
+VANILLA CHANGES:
+in order to make this mod work, certain things about the game to make sure you don't get another weapon.
+these consist of a few files, found in Content/GameplayChanges
+- IlEditing.cs
+This file uses MonoMod to edit certain functions in the terraria code.
+it is used to make sure you cannot drop or lose your item. (wip)
+- ModifyChestGeneration.cs
+This file replaces each weapon in every generated chest with 1-10 gold.
+- ModifyGlobalItems.cs
+This file makes sure that you cannot get weapons from boss bags
+and handles using the demon heart to get a free weapon
+- NewItemDrops.cs
+This file handles the ability to get the class tickets and the brainwash item
+the name is kind of misleading
+- RemoveNPCWeapons.cs
+This file handles removing all of the dropped weapons from NPCs
+which handles classic bosses and normal enemies, like demons & demon scythes
+- RemoveTileWeapons.cs
+This file handles removing all of the dropped weapons from all tiles in the game
+eg. removing weapons from shadow orb / crimson heart.
+- RemoveWeaponRecipes.cs
+This files handles removing all of the weapon recipes.
+
+thank you for reading and I hope this helps
