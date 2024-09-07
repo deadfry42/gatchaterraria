@@ -128,7 +128,6 @@ namespace badgatchagame.Content.NPCs
         {
             Player plr = Main.player[Main.myPlayer];
             RandomPlayer mplr = plr.GetModPlayer<RandomPlayer>();
-            Main.NewText(mplr.RerollPrice.ToString());
             if (firstButton) {
                 // first button
                 
@@ -152,6 +151,7 @@ namespace badgatchagame.Content.NPCs
 
                     mplr.CouponWeapon1 = ItemID.None;
                     mplr.CouponWeapon2 = ItemID.None;
+                    if (RemovePlayersHardmodeDiscount() == false) IncreaseRerollPrice();
 
                     return;
                 }
@@ -231,6 +231,7 @@ namespace badgatchagame.Content.NPCs
 
                     mplr.CouponWeapon1 = ItemID.None;
                     mplr.CouponWeapon2 = ItemID.None;
+                    if (RemovePlayersHardmodeDiscount() == false) IncreaseRerollPrice();
 
                     return;
                 }

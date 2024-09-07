@@ -1,8 +1,7 @@
 > [!WARNING]
-> this mod is potentially destructive on other worlds.  
+> this mod is _potentially_ **DESTRUCTIVE** on other worlds.  
 > if you plan on playing this mod, please make a new world & player.  
 > (this is because when rolling a new item, all of your current weapons get deleted)  
-> (and also so you can't get weapons from randomly generated chests)  
 
 ----------
 
@@ -31,7 +30,17 @@ in all seriousness, this mod is specifically designed to make you want to kill y
 
 patch notes:
 
-version 1.1.1 -> minor tweaks, such as lowering the price.
+version 1.1.3 -> various changes:
+- Simple notification when EoW/BoC is killed for the first time
+- Remove Travelling merchant's ability to sell weapons (still wip)  
+- Remove weapons from shadow orbs & crimson hearts  
+- Made abigails flower unobtainable
+- Made water bolt unobtainable
+- Several organisation changes
+- Added seperate workshop description
+
+version 1.1.2 -> bug fixes  
+version 1.1.1 -> minor tweaks, such as lowering the price.  
 version 1.1.0 -> various changes: (scope creep is crazy)  
 - Many ways to get a lower price and/or a good deal
 - Imposing restrictions to try to make weapons stay in your inventory

@@ -66,6 +66,11 @@ Items: {
 			'''
 		DisplayName: Buy 1 get 1 free coupon
 	}
+
+	test: {
+		DisplayName: test
+		Tooltip: ""
+	}
 }
 
 NPCs: {

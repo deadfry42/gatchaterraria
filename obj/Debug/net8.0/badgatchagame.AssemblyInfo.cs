@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("badgatchagame")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+77974613c1e71cc7fc660d76181a447646904a2b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+12eaee0820e30fff89cc900248efad7e2469d218")]
 [assembly: System.Reflection.AssemblyProductAttribute("badgatchagame")]
 [assembly: System.Reflection.AssemblyTitleAttribute("badgatchagame")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

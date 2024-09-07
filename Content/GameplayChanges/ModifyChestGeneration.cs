@@ -9,7 +9,7 @@ using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
 namespace badgatchagame.Content.GameplayChanges
 {
-    public class RemoveChestWeapons : ModSystem
+    public class ModifyChestGeneration : ModSystem
     {
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {

@@ -9,7 +9,7 @@ using badgatchagame.Content.Items.Tickets;
 
 namespace badgatchagame.Content.GameplayChanges
 {
-    public class RemoveBagWeapons : GlobalItem
+    public class ModifyGlobalItems : GlobalItem
     {
         public override void ModifyItemLoot(Item item, ItemLoot itemLoot)
         {

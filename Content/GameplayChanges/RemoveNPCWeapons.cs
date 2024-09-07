@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 using System.Collections.Generic;
 using Terraria.GameContent.ItemDropRules;
 using static badgatchagame.Content.Randomisation.RandomItemsLists;
+using Terraria.ID;
 
 namespace badgatchagame.Content.GameplayChanges
 {
@@ -29,8 +30,15 @@ namespace badgatchagame.Content.GameplayChanges
             base.ModifyShop(shop);
         }
 
-        private static void Log(string S) {
-            ModContent.GetInstance<badgatchagame>().Logger.Info(S);
+        public override void ModifyActiveShop(NPC npc, string shopName, Item[] items)
+        { // hacky solution for travelling merchant
+            List<int> itemPool = getAllRandomItems();
+            for (int i = 0; i < items.Length; i++) {
+                Item it = items[i];
+                if (it == null) continue;
+                if (itemPool.Contains(it.type)) {items[i] = new Item(0);}
+            }
+            base.ModifyActiveShop(npc, shopName, items);
         }
 
         private static int[] RemoveAllItemsInDropIDS(int[] dropIds) {
