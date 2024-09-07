@@ -1,9 +1,10 @@
-using badgatchagame.Content.Items;
-using badgatchagame.Content.Items.Tickets;
-using badgatchagame.Content.PlayerObjects;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using badgatchagame.Content.Items;
+using badgatchagame.Content.Items.Tickets;
+using badgatchagame.Content.PlayerObjects;
 using static badgatchagame.Content.WorldObjects.RandomWorld;
 
 namespace badgatchagame.Content.GameplayChanges

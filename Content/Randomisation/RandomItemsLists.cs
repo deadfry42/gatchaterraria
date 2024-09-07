@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using badgatchagame.Content.Items;
-using CsvHelper;
 using Terraria;
 using Terraria.GameContent.Events;
 using Terraria.ID;

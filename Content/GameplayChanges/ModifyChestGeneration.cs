@@ -1,10 +1,12 @@
-using System.Collections.Generic;
 using Terraria;
-using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
+using Terraria.GameContent.Generation;
+
+using System.Collections.Generic;
+
 using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
 namespace badgatchagame.Content.GameplayChanges

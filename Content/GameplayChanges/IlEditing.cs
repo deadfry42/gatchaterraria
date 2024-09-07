@@ -1,13 +1,15 @@
-using Terraria.ModLoader;
-using MonoMod.Cil;
+using Terraria;
 using Terraria.UI;
+using Terraria.ModLoader;
 
+using MonoMod.Cil;
 using static Mono.Cecil.Cil.OpCodes;
-using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
 using System.Collections.Generic;
 using System;
-using Terraria;
+
+
+using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
 namespace badgatchagame.Content.GameplayChanges
 {

@@ -8,9 +8,8 @@ using Terraria.Audio;
 
 using badgatchagame.Content.PlayerObjects;
 using badgatchagame.Content.Randomisation;
-using static badgatchagame.Content.Randomisation.RandomItemsLists;
 using badgatchagame.Content.Items.Tickets;
-using System.Text;
+using static badgatchagame.Content.Randomisation.RandomItemsLists;
 
 namespace badgatchagame.Content.NPCs
 { 

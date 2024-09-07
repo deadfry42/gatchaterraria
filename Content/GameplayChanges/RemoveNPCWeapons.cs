@@ -1,9 +1,10 @@
 using Terraria;
 using Terraria.ModLoader;
-using System.Collections.Generic;
 using Terraria.GameContent.ItemDropRules;
+
+using System.Collections.Generic;
+
 using static badgatchagame.Content.Randomisation.RandomItemsLists;
-using Terraria.ID;
 
 namespace badgatchagame.Content.GameplayChanges
 {
