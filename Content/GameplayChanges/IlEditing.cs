@@ -53,7 +53,7 @@ namespace badgatchagame.Content.GameplayChanges
                 // loads ref item
                 c.Emit(Ldelem_Ref);
                 // do the ItemIsAllowed function
-                c.Emit(Call, Type.GetType("badgatchagame.Content.GameplayChanges.RestrictChestItems").GetMethod("ItemIsAllowed", new Type[] { typeof(Terraria.Item) } ));
+                c.Emit(Call, Type.GetType("badgatchagame.Content.GameplayChanges.IlEditing").GetMethod("ItemIsAllowed", new Type[] { typeof(Terraria.Item) } ));
                 // if true, continue with the rest of the code
                 c.Emit(Brfalse_S, start);
 
