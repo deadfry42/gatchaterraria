@@ -7,17 +7,17 @@
 
 **PLAY HERE**: https://steamcommunity.com/sharedfiles/filedetails/?id=3261218686
 
-this is a mod that adds an npc called the "Retired Weaponsmith".  
-he is not a painter. no matter what he tells you, he is not a painter.  
-this guy is a bastard. he takes every weapon in the world and sells it back to you.  
+this mod adds a new npc called the "Retired Weaponsmith"
+he is VERY annoying
 
-you have to deal with it and just use his weapons. good luck getting any other weapons outside of the ones he sells you.  
+he stole all of the weapons in the world, making every weapon unobtainable.
+instead, you need to get your weapons from him.
 
-btw, his prices increase overtime, and the weapons you get will likely be awful  
+each time you spin a new item from him, you get a random weapon, based on your progression ingame
+but each time the price goes up, and up, until you have to pay 5 platinum for a copper shortsword.
 
-there are temporary ways to reduce the amount you pay, but im not gonna tell you - read the code lol ;)  
-
-additionally, there are ways to get a weapon you might want with certain items, which you will probably obtain during your playthrough  
+there are ways to mitigate his prices, or get a better deal, or get the weapons you want,
+but it makes the game a LOT harder.
 
 good luck :)  
 
@@ -30,6 +30,7 @@ in all seriousness, this mod is specifically designed to make you want to kill y
 
 patch notes:
 
+version 1.1.7 -> changed description again sorry
 version 1.1.6 -> changed description slightly, added todo.txt
 version 1.1.5 -> removed dd2 sentries from removed items, created more progression groups for edge cases
 version 1.1.4 -> 2 new mechanics with the Retired Weaponsmith  
