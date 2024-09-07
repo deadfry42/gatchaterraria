@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.GameContent.Events;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Utilities;
 
 // i know
 // i hate myself too
@@ -13,7 +14,7 @@ namespace badgatchagame.Content.Randomisation
     public class RandomItemsLists : ModSystem
     {
         public static readonly List<int> randomItemsPreboss = [
-            ModContent.ItemType<TROLOLOLOL>(),
+            // ModContent.ItemType<TROLOLOLOL>(), i'm not that mean :)
 
             ItemID.CopperShortsword,
             ItemID.TinShortsword,
@@ -23,25 +24,19 @@ namespace badgatchagame.Content.Randomisation
             ItemID.TungstenShortsword,
             ItemID.GoldShortsword,
             ItemID.PlatinumShortsword,
-            
             ItemID.WoodenSword,
             ItemID.WoodenBow,
             ItemID.WoodenBoomerang,
             ItemID.WoodYoyo,
-
             ItemID.AbigailsFlower,
             ItemID.JungleYoyo,
             ItemID.AmberStaff,
             ItemID.AmethystStaff,
-            ItemID.CrimsonYoyo,
-            ItemID.CorruptYoyo,
             ItemID.AshWoodBow,
             ItemID.AshWoodSword,
-            ItemID.BallOHurt,
             ItemID.BatBat,
             ItemID.BladeofGrass,
             ItemID.BladedGlove,
-            ItemID.BloodButcherer,
             ItemID.BloodRainBow,
             ItemID.BloodyMachete,
             ItemID.Blowpipe,
@@ -55,12 +50,8 @@ namespace badgatchagame.Content.Randomisation
             ItemID.ChainKnife,
             ItemID.CopperBow,
             ItemID.CopperBroadsword,
-            ItemID.CrimsonRod,
-            ItemID.DemonBow,
             ItemID.DemonScythe,
             ItemID.DiamondStaff,
-            ItemID.EbonwoodBow,
-            ItemID.EbonwoodSword,
             ItemID.EmeraldStaff,
             ItemID.EnchantedBoomerang,
             ItemID.EnchantedSword,
@@ -85,11 +76,9 @@ namespace badgatchagame.Content.Randomisation
             ItemID.LeadBow,
             ItemID.LeadBroadsword,
             ItemID.BlandWhip,
-            ItemID.LightsBane,
             ItemID.Mace,
             ItemID.AntlionClaw,
             ItemID.Minishark,
-            ItemID.Musket,
             ItemID.PainterPaintballGun,
             ItemID.PalmWoodBow,
             ItemID.PalmWoodSword,
@@ -104,8 +93,6 @@ namespace badgatchagame.Content.Randomisation
             ItemID.Ruler,
             ItemID.Sandgun,
             ItemID.SapphireStaff,
-            ItemID.ShadewoodBow,
-            ItemID.ShadewoodSword,
             ItemID.Shroomerang,
             ItemID.SilverBow,
             ItemID.SilverBroadsword,
@@ -117,11 +104,8 @@ namespace badgatchagame.Content.Randomisation
             ItemID.ThunderSpear,
             ItemID.StylistKilLaKillScissorsIWish,
             ItemID.Swordfish,
-            ItemID.TendonBow,
             ItemID.TentacleSpike,
             ItemID.Terragrim,
-            ItemID.TheRottedFork,
-            ItemID.TheUndertaker,
             ItemID.ThornChakram,
             ItemID.ThunderStaff,
             ItemID.TinBow,
@@ -133,11 +117,32 @@ namespace badgatchagame.Content.Randomisation
             ItemID.TungstenBroadsword,
             ItemID.Umbrella,
             ItemID.VampireFrogStaff,
-            ItemID.Vilethorn,
             ItemID.WandofFrosting,
             ItemID.WandofSparking,
             ItemID.ZombieArm,
             ItemID.Sickle,
+        ];
+
+        public static readonly List<int>randomItemsPreBossCorruption = [
+            ItemID.CorruptYoyo,
+            ItemID.Musket,
+            ItemID.Vilethorn,
+            ItemID.LightsBane,
+            ItemID.BallOHurt,
+            ItemID.DemonBow,
+            ItemID.EbonwoodBow,
+            ItemID.EbonwoodSword,
+        ];
+
+        public static readonly List<int>randomItemsPreBossCrimson = [
+            ItemID.TheRottedFork,
+            ItemID.TheUndertaker,
+            ItemID.CrimsonYoyo,
+            ItemID.BloodButcherer,
+            ItemID.TendonBow,
+            ItemID.CrimsonRod,
+            ItemID.ShadewoodBow,
+            ItemID.ShadewoodSword,
         ];
 
         public static readonly List<int> randomItemsPostEOC = [
@@ -146,9 +151,17 @@ namespace badgatchagame.Content.Randomisation
         ];
 
         public static readonly List<int> randomItemsPostEvil = [
-            ItemID.AleThrowingGlove,
             ItemID.Flamarang,
             ItemID.ImpStaff,
+            ItemID.FieryGreatsword,
+            ItemID.MoltenFury,
+        ];
+
+        public static readonly List<int> randomItemsPostUnconsiousMan = [
+            ItemID.AleThrowingGlove,
+        ];
+
+        public static readonly List<int> randomItemsPostMeteorite = [
             ItemID.RedPhaseblade,
             ItemID.BluePhaseblade,
             ItemID.GreenPhaseblade,
@@ -158,8 +171,10 @@ namespace badgatchagame.Content.Randomisation
             ItemID.YellowPhaseblade,
             ItemID.SpaceGun,
             ItemID.StarCannon,
+        ];
+
+        public static readonly List<int> randomItemsPostBoC = [
             ItemID.TheMeatball,
-            ItemID.FieryGreatsword,
         ];
 
         public static readonly List<int> randomItemsPostDeerclops = [
@@ -189,7 +204,6 @@ namespace badgatchagame.Content.Randomisation
             ItemID.Handgun,
             ItemID.HellwingBow,
             ItemID.MagicMissile,
-            ItemID.MoltenFury,
             ItemID.Muramasa,
             ItemID.NightsEdge,
             ItemID.PhoenixBlaster,
@@ -200,7 +214,7 @@ namespace badgatchagame.Content.Randomisation
             ItemID.WaterBolt,
         ];
 
-        public static readonly List<int> randomItemsPreHardmodeBoss = [
+        public static readonly List<int> randomItemsHardmode = [
             ItemID.AdamantiteGlaive,
             ItemID.AdamantiteRepeater,
             ItemID.AdamantiteSword,
@@ -208,13 +222,10 @@ namespace badgatchagame.Content.Randomisation
             ItemID.Anchor,
             ItemID.Bananarang,
             ItemID.BeamSword,
-            ItemID.Bladetongue,
             ItemID.SharpTears,
             ItemID.BreakerBlade,
-            ItemID.ChainGuillotines,
             ItemID.Chik,
             ItemID.TaxCollectorsStickOfDoom,
-            ItemID.ClingerStaff,
             ItemID.ClockworkAssaultRifle,
             ItemID.CobaltNaginata,
             ItemID.CobaltRepeater,
@@ -224,14 +235,10 @@ namespace badgatchagame.Content.Randomisation
             ItemID.CrystalSerpent,
             ItemID.CrystalStorm,
             ItemID.CrystalVileShard,
-            ItemID.CursedFlames,
             ItemID.Cutlass,
             ItemID.DaedalusStormbow,
             ItemID.DaoofPow,
-            ItemID.DartPistol,
-            ItemID.DartRifle,
             ItemID.DripplerFlail,
-            ItemID.FetidBaghnakhs,
             ItemID.FireWhip,
             ItemID.FlowerofFrost,
             ItemID.FlyingKnife,
@@ -239,7 +246,6 @@ namespace badgatchagame.Content.Randomisation
             ItemID.FrostStaff,
             ItemID.Frostbrand,
             ItemID.Gatligator,
-            ItemID.GoldenShower,
             ItemID.Gradient,
             ItemID.HamBat,
             ItemID.HelFire,
@@ -249,11 +255,9 @@ namespace badgatchagame.Content.Randomisation
             ItemID.JoustingLance,
             ItemID.KOCannon,
             ItemID.LaserRifle,
-            ItemID.SoulDrain,
             ItemID.MagicDagger,
             ItemID.Marrow,
             ItemID.MedusaHead,
-            ItemID.MeteorStaff,
             ItemID.MythrilHalberd,
             ItemID.MythrilRepeater,
             ItemID.MythrilSword,
@@ -268,13 +272,6 @@ namespace badgatchagame.Content.Randomisation
             ItemID.PalladiumSword,
             ItemID.PearlwoodBow,
             ItemID.PearlwoodSword,
-            ItemID.RedPhasesaber,
-            ItemID.BluePhasesaber,
-            ItemID.GreenPhasesaber,
-            ItemID.WhitePhasesaber,
-            ItemID.PurplePhasesaber,
-            ItemID.OrangePhasesaber,
-            ItemID.YellowPhasesaber,
             ItemID.PirateStaff,
             ItemID.PoisonStaff,
             ItemID.QueenSpiderStaff,
@@ -291,8 +288,34 @@ namespace badgatchagame.Content.Randomisation
             ItemID.TitaniumRepeater,
             ItemID.TitaniumSword,
             ItemID.TitaniumTrident,
-            ItemID.Toxikarp,
             ItemID.Uzi
+        ];
+
+        public static readonly List<int> randomItemsHardmodeMeteorite = [
+            ItemID.RedPhasesaber,
+            ItemID.BluePhasesaber,
+            ItemID.GreenPhasesaber,
+            ItemID.WhitePhasesaber,
+            ItemID.PurplePhasesaber,
+            ItemID.OrangePhasesaber,
+            ItemID.YellowPhasesaber,
+            ItemID.MeteorStaff,
+        ];
+
+        public static readonly List<int> randomItemsHardmodeCorruption = [
+            ItemID.ClingerStaff,
+            ItemID.DartRifle,
+            ItemID.ChainGuillotines,
+            ItemID.CursedFlames,
+            ItemID.Toxikarp,
+        ];
+
+        public static readonly List<int> randomItemsHardmodeCrimson = [
+            ItemID.FetidBaghnakhs,
+            ItemID.DartPistol,
+            ItemID.SoulDrain,
+            ItemID.GoldenShower,
+            ItemID.Bladetongue,
         ];
 
         public static readonly List<int> randomItemsPostQueenSlime = [
@@ -366,7 +389,6 @@ namespace badgatchagame.Content.Randomisation
             ItemID.RainbowGun,
             ItemID.PrincessWeapon,
             ItemID.RocketLauncher,
-            ItemID.ScourgeoftheCorruptor,
             ItemID.Seedler,
             ItemID.ShadowJoustingLance,
             ItemID.ShadowbeamStaff,
@@ -378,10 +400,18 @@ namespace badgatchagame.Content.Randomisation
             ItemID.TerraBlade,
             ItemID.TheEyeOfCthulhu,
             ItemID.ToxicFlask,
-            ItemID.VampireKnives,
             ItemID.VenusMagnum,
             ItemID.WaspGun,
         ];
+
+        public static readonly List<int> randomItemsPostPlanteraCorruption = [
+            ItemID.ScourgeoftheCorruptor,
+        ];
+
+        public static readonly List<int> randomItemsPostPlanteraCrimson = [
+            ItemID.VampireKnives,
+        ];
+
 
         public static readonly List<int> randomItemsPostFrost = [
             ItemID.BlizzardStaff,
@@ -470,18 +500,7 @@ namespace badgatchagame.Content.Randomisation
             ItemID.Zenith
         ];
 
-        public static readonly List<int> randomitemsPostDD2T1 = [
-            ItemID.DD2BallistraTowerT1Popper,
-            ItemID.DD2ExplosiveTrapT1Popper,
-            ItemID.DD2FlameburstTowerT1Popper,
-            ItemID.DD2LightningAuraT1Popper,
-        ];
-
         public static readonly List<int> randomitemsPostDD2T2 = [
-            ItemID.DD2BallistraTowerT2Popper,
-            ItemID.DD2ExplosiveTrapT2Popper,
-            ItemID.DD2FlameburstTowerT2Popper,
-            ItemID.DD2LightningAuraT2Popper,
             ItemID.BookStaff,
             ItemID.MonkStaffT1,
             ItemID.MonkStaffT2,
@@ -490,10 +509,6 @@ namespace badgatchagame.Content.Randomisation
         ];
 
         public static readonly List<int> randomitemsPostDD2T3 = [
-            ItemID.DD2BallistraTowerT3Popper,
-            ItemID.DD2ExplosiveTrapT3Popper,
-            ItemID.DD2FlameburstTowerT3Popper,
-            ItemID.DD2LightningAuraT3Popper,
             ItemID.DD2BetsyBow,
             ItemID.DD2SquireBetsySword,
             ItemID.MonkStaffT3,
@@ -503,7 +518,9 @@ namespace badgatchagame.Content.Randomisation
         public static List<int> getCurrentProgressionList() { // fuck you i dont care about naming conventions imma do it ma own way
             List<int> returnList = [];
             if (Main.hardMode) {
-                returnList.AddRange(randomItemsPreHardmodeBoss);
+                returnList.AddRange(randomItemsHardmode);
+                if (SpawnCondition.Meteor.Active) { returnList.AddRange(randomItemsHardmodeMeteorite); }
+                if (WorldGen.crimson) { returnList.AddRange(randomItemsHardmodeCrimson); } else {returnList.AddRange(randomItemsHardmodeCorruption);}
                 if (NPC.downedQueenSlime) { returnList.AddRange(randomItemsPostQueenSlime); }
                 if (NPC.downedMechBossAny) { returnList.AddRange(randomItemsPostMech); }
                 if (NPC.downedMechBossAny || NPC.downedQueenSlime) { returnList.AddRange(randomItemsPostAnyHardmodeBoss);}
@@ -512,6 +529,8 @@ namespace badgatchagame.Content.Randomisation
                 if (NPC.downedMechBoss3) { returnList.AddRange(randomItemsPostMechSkeletron); }
                 if (NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3) { returnList.AddRange(randomItemsPrePlantera); }
                 if (NPC.downedPlantBoss) { returnList.AddRange(randomItemsPostPlantera); }
+                if (NPC.downedPlantBoss && WorldGen.crimson) { returnList.AddRange(randomItemsPostPlanteraCrimson); }
+                else if (NPC.downedPlantBoss && !WorldGen.crimson) { returnList.AddRange(randomItemsPostPlanteraCorruption); }
                 if (NPC.downedChristmasIceQueen) { returnList.AddRange(randomItemsPostFrost); }
                 if (NPC.downedHalloweenKing) { returnList.AddRange(randomItemsPostPumpkin); }
                 if (NPC.downedFishron) { returnList.AddRange(randomItemsPostFish); }
@@ -524,13 +543,16 @@ namespace badgatchagame.Content.Randomisation
                 if (NPC.downedTowerStardust) { returnList.AddRange(randomItemsPostStardust); }
                 if (NPC.downedTowerNebula) { returnList.AddRange(randomItemsPostNebula); }
                 if (NPC.downedMoonlord) { returnList.AddRange(randomItemsPostMoonMan); }
-                if (DD2Event.DownedInvasionT1) { returnList.AddRange(randomitemsPostDD2T1); }
                 if (DD2Event.DownedInvasionT2) { returnList.AddRange(randomitemsPostDD2T2); }
                 if (DD2Event.DownedInvasionT3) { returnList.AddRange(randomitemsPostDD2T3); }
             } else {
                 returnList.AddRange(randomItemsPreboss);
                 if (NPC.downedBoss1) { returnList.AddRange(randomItemsPostEOC); }
+                if (WorldGen.crimson) { returnList.AddRange(randomItemsPreBossCrimson); } else {returnList.AddRange(randomItemsPreBossCorruption);}
                 if (NPC.downedBoss2) { returnList.AddRange(randomItemsPostEvil); }
+                if (NPC.downedBoss2 && WorldGen.crimson) { returnList.AddRange(randomItemsPostBoC); }
+                if (SpawnCondition.Meteor.Active) { returnList.AddRange(randomItemsPostMeteorite); } // this is seperate because i might only make it available once a meteorite has landed.
+                if (NPC.savedBartender) { returnList.AddRange(randomItemsPostUnconsiousMan); }
                 if (NPC.downedDeerclops) { returnList.AddRange(randomItemsPostDeerclops); }
                 if (NPC.downedQueenBee) { returnList.AddRange(randomItemsPostQueenBee); }
                 if (NPC.downedBoss3) { returnList.AddRange(randomItemsPostSkeletron); }
@@ -572,10 +594,7 @@ namespace badgatchagame.Content.Randomisation
 
                 case ItemID.VampireFrogStaff:
                 case ItemID.HornetStaff:
-                case ItemID.DD2BallistraTowerT1Popper:
-                case ItemID.DD2ExplosiveTrapT1Popper:
-                case ItemID.DD2FlameburstTowerT1Popper:
-                case ItemID.DD2LightningAuraT1Popper:
+                case ItemID.HoundiusShootius:
                     return new Item(ItemID.ThornWhip);
 
                 case ItemID.ImpStaff:
@@ -583,14 +602,11 @@ namespace badgatchagame.Content.Randomisation
 
                 case ItemID.SpiderStaff:
                 case ItemID.PirateStaff:
-                case ItemID.DD2BallistraTowerT2Popper:
-                case ItemID.DD2FlameburstTowerT2Popper:
+                case ItemID.QueenSpiderStaff:
                     return new Item(ItemID.FireWhip);
 
                 case ItemID.Smolstar:
                 case ItemID.SanguineStaff:
-                case ItemID.DD2ExplosiveTrapT2Popper:
-                case ItemID.DD2LightningAuraT2Popper:
                     return new Item(ItemID.CoolWhip);
 
                 case ItemID.OpticStaff:
@@ -599,20 +615,19 @@ namespace badgatchagame.Content.Randomisation
 
                 case ItemID.DeadlySphereStaff:
                 case ItemID.RavenStaff:
+                case ItemID.StaffoftheFrostHydra:
                     return new Item(ItemID.ScytheWhip);
 
                 case ItemID.StormTigerStaff:
                 case ItemID.XenoStaff:
                 case ItemID.TempestStaff:
-                case ItemID.DD2BallistraTowerT3Popper:
-                case ItemID.DD2FlameburstTowerT3Popper:
                     return new Item(ItemID.MaceWhip);
 
                 case ItemID.StardustDragonStaff:
                 case ItemID.StardustCellStaff:
                 case ItemID.EmpressBlade:
-                case ItemID.DD2ExplosiveTrapT3Popper:
-                case ItemID.DD2LightningAuraT3Popper:
+                case ItemID.MoonlordTurretStaff:
+                case ItemID.RainbowCrystalStaff:
                     return new Item(ItemID.RainbowWhip);
 
                 case ItemID.BlandWhip:
@@ -648,12 +663,20 @@ namespace badgatchagame.Content.Randomisation
             List<int> returnList =
             [
                 .. randomItemsPreboss,
+                .. randomItemsPreBossCorruption,
+                .. randomItemsPreBossCrimson,
                 .. randomItemsPostEOC,
                 .. randomItemsPostEvil,
+                .. randomItemsPostMeteorite,
+                .. randomItemsPostUnconsiousMan,
+                .. randomItemsPostBoC,
                 .. randomItemsPostDeerclops,
                 .. randomItemsPostQueenBee,
                 .. randomItemsPostSkeletron,
-                .. randomItemsPreHardmodeBoss,
+                .. randomItemsHardmode,
+                .. randomItemsHardmodeMeteorite,
+                .. randomItemsHardmodeCrimson,
+                .. randomItemsHardmodeCorruption,
                 .. randomItemsPostAnyHardmodeBoss,
                 .. randomItemsPostQueenSlime,
                 .. randomItemsPostMech,
@@ -662,6 +685,8 @@ namespace badgatchagame.Content.Randomisation
                 .. randomItemsPostMechSkeletron,
                 .. randomItemsPrePlantera,
                 .. randomItemsPostPlantera,
+                .. randomItemsPostPlanteraCorruption,
+                .. randomItemsPostPlanteraCrimson,
                 .. randomItemsPostFrost,
                 .. randomItemsPostPumpkin,
                 .. randomItemsPostFish,

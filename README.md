@@ -30,6 +30,7 @@ in all seriousness, this mod is specifically designed to make you want to kill y
 
 patch notes:
 
+version 1.1.5 -> removed dd2 sentries from removed items, created more progression groups for edge cases
 version 1.1.4 -> 2 new mechanics with the Retired Weaponsmith  
 version 1.1.3 -> various changes:
 - Simple notification when EoW/BoC is killed for the first time

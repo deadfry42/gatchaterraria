@@ -1,8 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using static badgatchagame.Content.WorldObjects.RandomWorld;
+using Terraria.ModLoader.Utilities;
 
 namespace badgatchagame.Content.Items
 { // this item is used to help me debug lol
@@ -25,7 +24,7 @@ namespace badgatchagame.Content.Items
 
         public override bool? UseItem(Player plr)
         {
-			Main.NewText(Boss2Defeated.ToString());
+			Main.NewText(SpawnCondition.Meteor.Active.ToString());
             return false;
         }
 
