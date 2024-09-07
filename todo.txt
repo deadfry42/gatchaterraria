@@ -1,0 +1,11 @@
+il editing:
+- remove items from fishing / fishing crates
+- remove ability to drop restricted items
+- remove ability to trash/sell restricted items
+- remove ability to put restricted items into item frames
+
+double check everything
+
+future tasks?
+- add mod support (eg. calamity, thorium)
+- turn the removing items thing into a library for ease of use

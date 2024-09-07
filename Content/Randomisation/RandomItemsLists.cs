@@ -514,6 +514,10 @@ namespace badgatchagame.Content.Randomisation
             ItemID.MonkStaffT3,
             ItemID.ApprenticeStaffT3,
         ];
+
+        public static readonly List<int> randomItemsDebug = [
+            // ItemID.Bass,
+        ];
         
         public static List<int> getCurrentProgressionList() { // fuck you i dont care about naming conventions imma do it ma own way
             List<int> returnList = [];
@@ -700,7 +704,7 @@ namespace badgatchagame.Content.Randomisation
                 .. randomItemsPostMoonMan,
 
 
-                // .. randomItemsDebug,
+                .. randomItemsDebug,
             ];
             return returnList;
         }

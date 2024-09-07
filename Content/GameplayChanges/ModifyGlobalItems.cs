@@ -21,7 +21,7 @@ namespace badgatchagame.Content.GameplayChanges
                     iterateItemDropRules(itemLoot, droptable, itemID);
                 }
             }
-            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<b1g1f>(), 10, 1, 1));
+            if (Main.expertMode) itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<b1g1f>(), 10, 1, 1));
         }
 
 
