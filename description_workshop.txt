@@ -26,5 +26,5 @@ in all seriousness, this mod is specifically designed to make you want to kill y
 
 ----------
 
-source code:
+source code & patch notes:
 https://github.com/deadfry42/gatchaterraria
